@@ -1,0 +1,26 @@
+{
+  "name": "@agent-bomber/server",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "pnpm --filter @agent-bomber/replay build && pnpm --filter @agent-bomber/protocol build && tsx watch src/index.ts",
+    "start": "node dist/index.js",
+    "test": "pnpm --filter @agent-bomber/replay build && pnpm --filter @agent-bomber/protocol build && vitest run src"
+  },
+  "dependencies": {
+    "@agent-bomber/agent": "workspace:*",
+    "@agent-bomber/core": "workspace:*",
+    "@agent-bomber/protocol": "workspace:*",
+    "@agent-bomber/replay": "workspace:*",
+    "@agent-bomber/strategy": "workspace:*",
+    "@fastify/cors": "^10.0.1",
+    "@fastify/websocket": "^11.0.1",
+    "fastify": "^5.3.3",
+    "nanoid": "^5.1.5",
+    "zod": "^3.25.7"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.4"
+  }
+}

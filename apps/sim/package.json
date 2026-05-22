@@ -1,0 +1,20 @@
+{
+  "name": "@agent-bomber/sim",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "once": "tsx src/cli.ts run-once",
+    "batch": "tsx src/cli.ts run-batch",
+    "benchmark": "tsx src/cli.ts benchmark"
+  },
+  "dependencies": {
+    "@agent-bomber/agent": "workspace:*",
+    "@agent-bomber/core": "workspace:*",
+    "@agent-bomber/replay": "workspace:*",
+    "@agent-bomber/strategy": "workspace:*"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.4"
+  }
+}

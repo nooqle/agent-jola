@@ -1,0 +1,22 @@
+services:
+  agent-jola:
+    build:
+      context: .
+    image: agent-jola:local
+    ports:
+      - "3001:3001"
+    environment:
+      NODE_ENV: production
+      HOST: 0.0.0.0
+      PORT: 3001
+      AGENT_BOMBER_DATA_DIR: /app/data
+      AGENT_JOLA_WEB_DIST: /app/apps/web/dist
+      AGENT_JOLA_API_KEY: ${AGENT_JOLA_API_KEY:-agent-jola-local-dev-key}
+      AGENT_JOLA_ADMIN_KEY: ${AGENT_JOLA_ADMIN_KEY:-agent-jola-local-admin-key}
+      AGENT_JOLA_KEY_ISSUER_SECRET: ${AGENT_JOLA_KEY_ISSUER_SECRET:-agent-jola-local-issuer-secret}
+      AGENT_JOLA_QUOTAS: ${AGENT_JOLA_QUOTAS:-character_randomize=unlimited,room_create=unlimited,template_read=unlimited,template_apply=unlimited,bridge_prompt=unlimited}
+    volumes:
+      - agent-jola-data:/app/data
+
+volumes:
+  agent-jola-data:

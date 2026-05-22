@@ -1,0 +1,13 @@
+{
+  "files": [],
+  "references": [
+    { "path": "packages/core" },
+    { "path": "packages/strategy" },
+    { "path": "packages/agent" },
+    { "path": "packages/replay" },
+    { "path": "packages/protocol" },
+    { "path": "apps/sim" },
+    { "path": "apps/server" },
+    { "path": "apps/web" }
+  ]
+}

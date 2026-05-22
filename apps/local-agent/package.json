@@ -1,0 +1,30 @@
+{
+  "name": "@agent-bomber/local-agent",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "main": "dist/client.js",
+  "types": "dist/client.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/client.d.ts",
+      "default": "./dist/client.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "mock": "tsx src/mock-agent.ts",
+    "openai": "tsx src/openai-agent.ts",
+    "anthropic": "tsx src/anthropic-agent.ts",
+    "setting": "tsx src/setting-cli.ts",
+    "template": "tsx src/templates-cli.ts",
+    "templates": "tsx src/templates-cli.ts list"
+  },
+  "dependencies": {
+    "@agent-bomber/protocol": "workspace:*",
+    "@agent-bomber/strategy": "workspace:*"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.4"
+  }
+}

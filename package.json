@@ -1,0 +1,46 @@
+{
+  "name": "agent-bomber",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.24.0",
+  "engines": {
+    "node": ">=22.13.0",
+    "pnpm": ">=10.0.0"
+  },
+  "scripts": {
+    "doctor": "node scripts/doctor.mjs",
+    "doctor:production": "node scripts/doctor-production.mjs",
+    "smoke:release": "node scripts/smoke-local-release.mjs",
+    "smoke:install": "node scripts/smoke-install-preview.mjs",
+    "verify:alpha": "pnpm doctor && pnpm build && pnpm lint && pnpm test && pnpm smoke:release && pnpm smoke:install",
+    "audit:security": "pnpm audit --audit-level high",
+    "dev": "concurrently -n server,web -c green,cyan \"pnpm --filter @agent-bomber/server dev\" \"pnpm --filter @agent-bomber/web dev\"",
+    "build": "pnpm -r --sort build",
+    "docker:build": "docker build -t agent-jola:local .",
+    "docker:up": "docker compose up --build",
+    "test": "vitest run",
+    "lint": "eslint . --ext .ts,.tsx",
+    "agent:mock": "pnpm --filter @agent-bomber/local-agent mock",
+    "agent:openai": "pnpm --filter @agent-bomber/local-agent openai",
+    "agent:anthropic": "pnpm --filter @agent-bomber/local-agent anthropic",
+    "agent:setting": "pnpm --filter @agent-bomber/local-agent setting",
+    "agent:template": "pnpm --filter @agent-bomber/local-agent template",
+    "agent:templates": "pnpm --filter @agent-bomber/local-agent templates",
+    "sim:once": "pnpm --filter @agent-bomber/sim run once",
+    "sim:batch": "pnpm --filter @agent-bomber/sim run batch",
+    "sim:benchmark": "pnpm --filter @agent-bomber/sim run benchmark"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.27.0",
+    "@types/node": "^22.15.18",
+    "@typescript-eslint/eslint-plugin": "^8.32.1",
+    "@typescript-eslint/parser": "^8.32.1",
+    "concurrently": "^9.1.2",
+    "eslint": "^9.27.0",
+    "prettier": "^3.5.3",
+    "tsx": "^4.19.4",
+    "typescript": "^5.8.3",
+    "vitest": "^3.1.4"
+  }
+}
