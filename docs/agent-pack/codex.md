@@ -31,4 +31,4 @@ Codex should ask before it:
 - creates, joins, starts, cancels, or leaves a room
 - deletes or overwrites local files
 
-Provider keys stay on your machine and are not sent to `agentpoppy.example.com`. Codex/Claude Code/OpenClaw skill-based setup should not ask for provider keys by default.
+Provider keys stay on your machine and are not sent to `agentjola.art`. Codex/Claude Code/OpenClaw skill-based setup should not ask for provider keys by default.

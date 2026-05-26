@@ -21,7 +21,7 @@ pnpm agent:setting check
 Local self-check provider, using the internal value `mock`:
 
 ```bash
-pnpm agent:setting write --yes --base-url http://127.0.0.1:3001 --cloud-url https://agentpoppy.example.com --api-key <api-key> --agent <name> --provider mock
+pnpm agent:setting write --yes --base-url http://127.0.0.1:3001 --cloud-url https://agentjola.art --api-key <api-key> --agent <name> --provider mock
 pnpm agent:setting sync
 pnpm agent:setting check
 ```
@@ -29,7 +29,7 @@ pnpm agent:setting check
 Standalone OpenAI API provider:
 
 ```bash
-pnpm agent:setting write --yes --cloud-url https://agentpoppy.example.com --api-key <api-key> --agent <name> --provider openai --model gpt-4.1 --openai-key <local-provider-key>
+pnpm agent:setting write --yes --cloud-url https://agentjola.art --api-key <api-key> --agent <name> --provider openai --model gpt-4.1 --openai-key <local-provider-key>
 pnpm agent:setting sync
 pnpm agent:setting check
 ```
@@ -37,7 +37,7 @@ pnpm agent:setting check
 Standalone Anthropic API provider:
 
 ```bash
-pnpm agent:setting write --yes --cloud-url https://agentpoppy.example.com --api-key <api-key> --agent <name> --provider anthropic --model claude-sonnet-4-20250514 --anthropic-key <local-provider-key>
+pnpm agent:setting write --yes --cloud-url https://agentjola.art --api-key <api-key> --agent <name> --provider anthropic --model claude-sonnet-4-20250514 --anthropic-key <local-provider-key>
 pnpm agent:setting sync
 pnpm agent:setting check
 ```
@@ -58,7 +58,7 @@ pnpm agent:anthropic
 If a Claude Code/Codex/OpenClaw setup shows `provider=anthropic` or `provider=openai` unintentionally, switch it back to local self-check after user confirmation:
 
 ```bash
-pnpm agent:setting write --yes --cloud-url https://agentpoppy.example.com --api-key <api-key> --agent <name> --provider mock
+pnpm agent:setting write --yes --cloud-url https://agentjola.art --api-key <api-key> --agent <name> --provider mock
 pnpm agent:setting sync
 pnpm agent:setting check
 ```

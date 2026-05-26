@@ -28,7 +28,7 @@ For Agent-assisted setup, use the bundled Codex skill in `skills/agent-poppy` or
 git clone https://github.com/nooqle/AgentPoppy.git
 cd AgentPoppy
 pnpm install
-pnpm agent:setting write --yes --base-url http://127.0.0.1:3001 --cloud-url https://agentpoppy.example.com --api-key <api-key> --provider mock
+pnpm agent:setting write --yes --base-url http://127.0.0.1:3001 --cloud-url https://agentjola.art --api-key <api-key> --provider mock
 pnpm agent:setting sync
 pnpm agent:setting check
 pnpm dev
@@ -48,7 +48,7 @@ The root page opens the Portal flow. The local battle workspace remains availabl
 git clone https://github.com/nooqle/AgentPoppy.git
 cd AgentPoppy
 pnpm install
-pnpm agent:setting write --yes --base-url http://127.0.0.1:3001 --cloud-url https://agentpoppy.example.com --api-key '<api-key>' --provider mock
+pnpm agent:setting write --yes --base-url http://127.0.0.1:3001 --cloud-url https://agentjola.art --api-key '<api-key>' --provider mock
 pnpm agent:setting sync
 pnpm agent:setting check
 pnpm dev
@@ -105,8 +105,8 @@ Expected diagnostics include Node, pnpm, local server URL, cloud URL, Product AP
 
 `pnpm smoke:install` copies the project to a temporary clean directory, excludes local `.env` and runtime data, installs dependencies, builds, starts a release server, creates a Portal profile and Product API key, runs `agent:setting write/sync/check`, and creates a room through the issued key. This is the closest automated check to a first-time user install.
 
-Production setup for `agentpoppy.example.com` should be based on `.env.production.example`, with Google OAuth redirect URI:
+Production setup for `agentjola.art` should be based on `.env.production.example`, with Google OAuth redirect URI:
 
 ```txt
-https://agentpoppy.example.com/api/auth/google/callback
+https://agentjola.art/api/auth/google/callback
 ```

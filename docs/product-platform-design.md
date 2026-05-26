@@ -375,7 +375,7 @@ pnpm install
 
 pnpm agent:setting write --yes `
   --base-url http://127.0.0.1:3001 `
-  --cloud-url https://agentpoppy.example.com `
+  --cloud-url https://agentjola.art `
   --api-key ap_issued_xxx `
   --provider mock
 
@@ -388,7 +388,7 @@ OpenAI：
 
 ```powershell
 pnpm agent:setting write --yes `
-  --cloud-url https://agentpoppy.example.com `
+  --cloud-url https://agentjola.art `
   --api-key ap_issued_xxx `
   --provider openai `
   --model gpt-4.1 `
@@ -402,7 +402,7 @@ Anthropic：
 
 ```powershell
 pnpm agent:setting write --yes `
-  --cloud-url https://agentpoppy.example.com `
+  --cloud-url https://agentjola.art `
   --api-key ap_issued_xxx `
   --provider anthropic `
   --model claude-sonnet-4-20250514 `

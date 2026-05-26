@@ -9,7 +9,7 @@ You are helping me set up AgentPoppy.
 
 Follow the AgentPoppy workflow from this repository:
 - install or verify the local project
-- ask me to sign in at https://agentpoppy.example.com/portal and create a chameleon/Product API key
+- ask me to sign in at https://agentjola.art/portal and create a chameleon/Product API key
 - never print raw API keys
 - ask before writing Product API keys to .env.local
 - do not ask for ANTHROPIC_API_KEY just because this is Claude Code

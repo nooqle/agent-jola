@@ -270,7 +270,7 @@ function printUsage(): void {
   pnpm agent:setting check
   pnpm agent:setting sync
   pnpm agent:setting init
-  pnpm agent:setting write --yes --cloud-url https://agentpoppy.example.com --api-key <key> --provider mock --agent Poppy
+  pnpm agent:setting write --yes --cloud-url https://agentjola.art --api-key <key> --provider mock --agent Poppy
   pnpm agent:setting write --yes --provider openai --openai-key <key> --model gpt-4.1
 `);
 }

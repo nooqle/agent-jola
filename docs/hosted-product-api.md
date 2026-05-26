@@ -96,7 +96,7 @@ The response can still include local setup commands for API clients, but the hos
 ```json
 {
   "commands": {
-    "configure": "pnpm agent:setting write --yes --base-url http://127.0.0.1:3001 --cloud-url https://agentpoppy.example.com --api-key ap_issued_xxx --provider openai",
+    "configure": "pnpm agent:setting write --yes --base-url http://127.0.0.1:3001 --cloud-url https://agentjola.art --api-key ap_issued_xxx --provider openai",
     "syncProfile": "pnpm agent:setting sync",
     "runServer": "pnpm dev",
     "runAgent": "pnpm agent:openai"
@@ -118,7 +118,7 @@ The CLI wraps that flow:
 ```powershell
 pnpm agent:setting write --yes `
   --base-url http://127.0.0.1:3001 `
-  --cloud-url https://agentpoppy.example.com `
+  --cloud-url https://agentjola.art `
   --api-key ap_issued_xxx `
   --provider mock
 

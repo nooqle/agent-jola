@@ -29,7 +29,7 @@ Non-interactive mock Agent setup:
 ```powershell
 pnpm agent:setting write --yes `
   --base-url http://127.0.0.1:3001 `
-  --cloud-url https://agentpoppy.example.com `
+  --cloud-url https://agentjola.art `
   --api-key agent-poppy-local-dev-key `
   --agent Ember `
   --provider mock
@@ -39,7 +39,7 @@ OpenAI local Agent setup:
 
 ```powershell
 pnpm agent:setting write --yes `
-  --cloud-url https://agentpoppy.example.com `
+  --cloud-url https://agentjola.art `
   --api-key ap_issued_xxx `
   --agent Ember `
   --provider openai `
@@ -51,7 +51,7 @@ Anthropic local Agent setup:
 
 ```powershell
 pnpm agent:setting write --yes `
-  --cloud-url https://agentpoppy.example.com `
+  --cloud-url https://agentjola.art `
   --api-key ap_issued_xxx `
   --agent Ember `
   --provider anthropic `

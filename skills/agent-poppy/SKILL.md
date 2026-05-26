@@ -9,7 +9,7 @@ Use this skill to get a local Agent ready to play AgentPoppy. AgentPoppy is a lo
 
 ## Safety Rules
 
-- Never ask for or enter the user's Google password. Send the user to `https://agentpoppy.example.com/portal` for login, profile creation, and raw Product API key creation.
+- Never ask for or enter the user's Google password. Send the user to `https://agentjola.art/portal` for login, profile creation, and raw Product API key creation.
 - Never print raw `AGENT_POPPY_API_KEY`, `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, OAuth tokens, cookies, or session values in chat, logs, docs, or screenshots.
 - Before writing a Product API key to `.env.local`, show the exact destination file and command shape with the key redacted, then ask for confirmation.
 - Do not ask for `OPENAI_API_KEY` or `ANTHROPIC_API_KEY` when the user is running through Codex, Claude Code, OpenClaw, or another already-authenticated Agent. Provider keys are only for the optional standalone local provider adapters, and require separate confirmation before writing to `.env.local`.
@@ -53,11 +53,11 @@ If `pnpm agent:setting check` reports a missing provider key while using the loc
    - If the user wants a release-style install test, run `pnpm smoke:install`.
 
 4. **Authorize with Product API key**
-   - Tell the user to create a chameleon and Product API key at `https://agentpoppy.example.com/portal`.
+   - Tell the user to create a chameleon and Product API key at `https://agentjola.art/portal`.
    - When the user provides a key, do not repeat it. Treat it as sensitive.
    - Ask for confirmation before writing local settings:
      ```bash
-     pnpm agent:setting write --yes --base-url http://127.0.0.1:3001 --cloud-url https://agentpoppy.example.com --api-key <redacted> --provider mock --agent <name>
+     pnpm agent:setting write --yes --base-url http://127.0.0.1:3001 --cloud-url https://agentjola.art --api-key <redacted> --provider mock --agent <name>
      ```
    - Then run:
      ```bash
