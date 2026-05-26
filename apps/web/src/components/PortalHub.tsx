@@ -13,14 +13,14 @@ import {
   X
 } from "lucide-react";
 import { useEffect, useMemo, useState, type CSSProperties, type ReactNode } from "react";
-import { buildLocalAgentPrompt, parseNaturalLanguageStrategy } from "@agent-bomber/strategy";
+import { buildLocalAgentPrompt, parseNaturalLanguageStrategy } from "@agent-poppy/strategy";
 import type {
   PortalInstallCommandResponse,
   PortalMeResponse,
   PortalProductApiKeyResponse,
   ProductApiQuotaPolicy,
   ProductApiKeyRecord
-} from "@agent-bomber/protocol";
+} from "@agent-poppy/protocol";
 import {
   ApiRequestError,
   portalCreateProductKey,
@@ -208,9 +208,9 @@ export function PortalHub({
       <section className="portal-shell">
         <div className="portal-hero">
           <div className="portal-hero-copy">
-            <p className="eyebrow">Agent Jola Developer Preview</p>
+            <p className="eyebrow">AgentPoppy Developer Preview</p>
             <h1>让你的本地 Agent 进入房间</h1>
-            <p>在官网配置角色和战术，生成 API key，再把 Agent Jola Skill 任务交给 Codex、Claude Code、OpenClaw 或自己的 Agent。</p>
+            <p>在官网配置角色和战术，生成 API key，再把 AgentPoppy Skill 任务交给 Codex、Claude Code、OpenClaw 或自己的 Agent。</p>
             <div className="portal-login-steps" aria-label="接入流程">
               <span>
                 <strong>1</strong>
@@ -252,7 +252,7 @@ export function PortalHub({
     <section className="portal-shell portal-console">
       <div className="portal-topbar">
         <div>
-          <p className="eyebrow">Agent Jola Portal</p>
+          <p className="eyebrow">AgentPoppy Portal</p>
           <h1>{hasCharacter ? "本地 Agent 接入向导" : "创建你的变色龙"}</h1>
           <p>
             {hasCharacter
@@ -310,13 +310,13 @@ export function PortalHub({
             <PortalSetupStep
               step="01"
               title="生成 API key 并交给 Agent"
-              description="API key 只在创建时显示一次。复制给你信任的本地 Agent，让它通过 Agent Jola Skill 完成安装和绑定。"
+              description="API key 只在创建时显示一次。复制给你信任的本地 Agent，让它通过 AgentPoppy Skill 完成安装和绑定。"
               status={createdKey ? "key 已生成" : activeKey ? "已有 key" : "待生成"}
               active
             >
               <div className="portal-key-console">
                 <div className="portal-runtime-note">
-                  <span>默认通过 Agent Jola Skill 接入</span>
+                  <span>默认通过 AgentPoppy Skill 接入</span>
                   <small>Claude Code、Codex、OpenClaw 不需要额外模型 API key；只有独立直连 OpenAI/Anthropic runtime 才需要。</small>
                 </div>
                 <button type="button" className="portal-card-action primary-button" onClick={createKey}>
@@ -447,7 +447,7 @@ function PortalBattleDemo() {
   const softTiles = new Set([12, 13, 21, 29, 34, 35, 37, 43, 45, 51, 52, 60, 67, 69]);
 
   return (
-    <div className="portal-battle-demo portal-lobby-demo" aria-label="Agent Jola 等待开局展示">
+    <div className="portal-battle-demo portal-lobby-demo" aria-label="AgentPoppy 等待开局展示">
       <div className="portal-lobby-panel">
         <header className="portal-lobby-header">
           <div>
@@ -683,7 +683,7 @@ function AgentPackCardGrid({
       id: "codex",
       label: "Codex",
       title: "用 Skill 接入项目",
-      description: "让 Codex 使用 Agent Jola skill，完成授权确认、配置写入、Prompt 预览和本地自检。"
+      description: "让 Codex 使用 AgentPoppy skill，完成授权确认、配置写入、Prompt 预览和本地自检。"
     },
     {
       id: "claude",
@@ -703,7 +703,7 @@ function AgentPackCardGrid({
     <div className="agent-pack-grid" aria-label="复制给本地 Agent">
       <div className="agent-pack-intro">
         <span>给我的 Agent</span>
-        <strong>复制一段任务，它就知道怎么接入 Agent Jola。</strong>
+        <strong>复制一段任务，它就知道怎么接入 AgentPoppy。</strong>
         <small>这段内容可能包含刚生成的 API key，只发给你信任的本地 Agent。</small>
       </div>
       {cards.map((card) => {
@@ -733,14 +733,14 @@ function buildAgentPackInstruction(
 ): string {
   const platformIntro =
     target === "codex"
-      ? "Use the Agent Jola skill. If it is not installed yet, install it from the skill source below."
+      ? "Use the AgentPoppy skill. If it is not installed yet, install it from the skill source below."
       : target === "claude"
-        ? "Use these Agent Jola instructions in Claude Code."
-        : "Use these Agent Jola instructions in OpenClaw.";
+        ? "Use these AgentPoppy instructions in Claude Code."
+        : "Use these AgentPoppy instructions in OpenClaw.";
   const cloudUrl = install?.cloudUrl ?? window.location.origin;
   const localUrl = install?.baseUrl ?? "http://127.0.0.1:3001";
   return [
-    "Set up Agent Jola for my local Agent.",
+    "Set up AgentPoppy for my local Agent.",
     "",
     platformIntro,
     "",
@@ -757,8 +757,8 @@ function buildAgentPackInstruction(
     `Cloud URL: ${cloudUrl}`,
     `Local URL: ${localUrl}`,
     "",
-    "Use the Agent Jola skill as the setup entry point.",
-    "Skill source: https://github.com/nooqle/agent-jola/tree/main/skills/agent-jola",
+    "Use the AgentPoppy skill as the setup entry point.",
+    "Skill source: https://github.com/nooqle/AgentPoppy/tree/main/skills/agent-poppy",
     "After the skill is available, ask for confirmation before it writes local settings.",
     "",
     "Battle strategy to preview before applying:",

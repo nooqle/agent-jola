@@ -1,5 +1,5 @@
 {
-  "name": "@agent-bomber/web",
+  "name": "@agent-poppy/web",
   "version": "0.1.0",
   "type": "module",
   "scripts": {
@@ -8,10 +8,10 @@
     "preview": "vite preview --host 0.0.0.0"
   },
   "dependencies": {
-    "@agent-bomber/core": "workspace:*",
-    "@agent-bomber/protocol": "workspace:*",
-    "@agent-bomber/replay": "workspace:*",
-    "@agent-bomber/strategy": "workspace:*",
+    "@agent-poppy/core": "workspace:*",
+    "@agent-poppy/protocol": "workspace:*",
+    "@agent-poppy/replay": "workspace:*",
+    "@agent-poppy/strategy": "workspace:*",
     "@vitejs/plugin-react": "^4.4.1",
     "lucide-react": "^0.511.0",
     "phaser": "^3.88.2",

@@ -26,7 +26,7 @@ interface BoardLabels {
   me: string;
 }
 
-class AgentBomberScene extends Phaser.Scene {
+class AgentPoppyScene extends Phaser.Scene {
   private snapshot?: MatchState;
   private decision: DecisionLogEntry | undefined;
   private overlay: "off" | "danger" | "path" = "off";
@@ -43,7 +43,7 @@ class AgentBomberScene extends Phaser.Scene {
   private myAgentId: string | undefined;
 
   constructor() {
-    super("agent-bomber-board");
+    super("agent-poppy-board");
   }
 
   create() {
@@ -649,7 +649,7 @@ export function PhaserBoard({ state, decision, overlay, myAgentId }: PhaserBoard
       pixelArt: true,
       width: CANVAS_WIDTH,
       height: CANVAS_HEIGHT,
-      scene: AgentBomberScene,
+      scene: AgentPoppyScene,
       scale: {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH,
@@ -665,7 +665,7 @@ export function PhaserBoard({ state, decision, overlay, myAgentId }: PhaserBoard
 
   useEffect(() => {
     const pushFrame = () => {
-      const scene = gameRef.current?.scene.getScene("agent-bomber-board") as AgentBomberScene | undefined;
+      const scene = gameRef.current?.scene.getScene("agent-poppy-board") as AgentPoppyScene | undefined;
       scene?.setFrame(state, decision, overlay, labels, myAgentId);
     };
     pushFrame();

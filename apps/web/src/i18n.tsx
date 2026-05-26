@@ -8,7 +8,7 @@ type Messages = Record<string, string>;
 
 const dictionaries: Record<Language, Messages> = {
   zh: {
-    "app.brand": "Agent Jola 本地战术实验室",
+    "app.brand": "AgentPoppy 本地战术实验室",
     "app.back": "返回工作台",
     "language.label": "语言",
     "language.zh": "中文",
@@ -24,7 +24,7 @@ const dictionaries: Record<Language, Messages> = {
     "source.websocket": "来源：服务端实时流",
     "source.mock": "来源：本地模拟流",
 
-    "workbench.eyebrow": "Agent Jola Developer Preview",
+    "workbench.eyebrow": "AgentPoppy Developer Preview",
     "workbench.title": "作战大厅",
     "workbench.subtitle": "配置变色龙、写作战策略，然后进入 4 人毒圈乱斗。",
     "workbench.nav.battle": "进入对战",
@@ -130,7 +130,7 @@ const dictionaries: Record<Language, Messages> = {
     "workbench.copyCurrentForAgent": "复制当前配置",
     "workbench.copied": "已复制",
     "workbench.externalPrompt.runtimeHint":
-      "你可以通过 Agent Jola 本地 SDK 或 /api/bridge 拉取观察、提交动作；如果只是在网站里配置，把下面“当前推荐战术”复制到作战准备即可。",
+      "你可以通过 AgentPoppy 本地 SDK 或 /api/bridge 拉取观察、提交动作；如果只是在网站里配置，把下面“当前推荐战术”复制到作战准备即可。",
     "workbench.externalPrompt.languageNote":
       "请保持输出简洁，优先返回可执行策略，不要解释无关背景。",
     "workbench.template.safeAttack.tag": "均衡",
@@ -339,7 +339,7 @@ const dictionaries: Record<Language, Messages> = {
     "board.me": "我"
   },
   ja: {
-    "app.brand": "Agent Jola ローカル戦術ラボ",
+    "app.brand": "AgentPoppy ローカル戦術ラボ",
     "app.back": "ワークベンチへ戻る",
     "language.label": "言語",
     "language.zh": "中文",
@@ -353,7 +353,7 @@ const dictionaries: Record<Language, Messages> = {
     "server.mock": "ローカル模擬",
     "source.websocket": "ソース：サーバーリアルタイム",
     "source.mock": "ソース：ローカル模擬",
-    "workbench.eyebrow": "Agent Jola Developer Preview",
+    "workbench.eyebrow": "AgentPoppy Developer Preview",
     "workbench.title": "作戦ロビー",
     "workbench.subtitle": "カメレオンを整え、作戦を書き、4人毒圏バトルへ入ります。",
     "workbench.nav.battle": "対戦へ",
@@ -462,7 +462,7 @@ const dictionaries: Record<Language, Messages> = {
     "workbench.copyCurrentForAgent": "現在設定をコピー",
     "workbench.copied": "コピー済み",
     "workbench.externalPrompt.runtimeHint":
-      "Agent Jola のローカル SDK または /api/bridge で観測を取得し、行動を送信できます。サイトだけで設定する場合は、下の「現在の推奨作戦」を作戦準備に貼り付けてください。",
+      "AgentPoppy のローカル SDK または /api/bridge で観測を取得し、行動を送信できます。サイトだけで設定する場合は、下の「現在の推奨作戦」を作戦準備に貼り付けてください。",
     "workbench.externalPrompt.languageNote":
       "出力は短く保ち、背景説明ではなく実行できる作戦を優先してください。",
     "workbench.template.safeAttack.tag": "均衡",
@@ -666,7 +666,7 @@ const dictionaries: Record<Language, Messages> = {
     "board.me": "自分"
   },
   en: {
-    "app.brand": "Agent Jola Local Tactical Lab",
+    "app.brand": "AgentPoppy Local Tactical Lab",
     "app.back": "Back to workbench",
     "language.label": "Language",
     "language.zh": "中文",
@@ -680,7 +680,7 @@ const dictionaries: Record<Language, Messages> = {
     "server.mock": "Local mock",
     "source.websocket": "Source: server websocket",
     "source.mock": "Source: local mock stream",
-    "workbench.eyebrow": "Agent Jola Developer Preview",
+    "workbench.eyebrow": "AgentPoppy Developer Preview",
     "workbench.title": "Battle lobby",
     "workbench.subtitle":
       "Tune your chameleon, write a battle plan, then enter a 4-player poison-zone match.",
@@ -795,7 +795,7 @@ const dictionaries: Record<Language, Messages> = {
     "workbench.copyCurrentForAgent": "Copy current setup",
     "workbench.copied": "Copied",
     "workbench.externalPrompt.runtimeHint":
-      "You can use the Agent Jola local SDK or /api/bridge to read observations and submit actions. If you only configure inside the site, paste the current recommended tactic into battle prep.",
+      "You can use the AgentPoppy local SDK or /api/bridge to read observations and submit actions. If you only configure inside the site, paste the current recommended tactic into battle prep.",
     "workbench.externalPrompt.languageNote":
       "Keep output concise and prioritize executable tactics over unrelated background.",
     "workbench.template.safeAttack.tag": "Balanced",

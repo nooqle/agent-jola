@@ -29,7 +29,7 @@ function semverMajor(version) {
 }
 
 const nodeVersion = process.version;
-check("Node.js >= 20", semverMajor(nodeVersion) >= 20, nodeVersion);
+check("Node.js >= 22", semverMajor(nodeVersion) >= 22, nodeVersion);
 
 const pnpm = run("pnpm", ["--version"]);
 check(
@@ -91,10 +91,10 @@ for (const item of checks) {
 
 console.log("");
 if (failed.length > 0) {
-  console.log(`Doctor found ${failed.length} issue(s). Fix them before starting Agent Jola.`);
+  console.log(`Doctor found ${failed.length} issue(s). Fix them before starting AgentPoppy.`);
   process.exitCode = 1;
 } else {
-  console.log("Agent Jola local workspace looks ready.");
+  console.log("AgentPoppy local workspace looks ready.");
   console.log("");
   console.log("Next commands:");
   console.log("  pnpm dev");

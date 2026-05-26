@@ -1,4 +1,4 @@
-﻿# Local Agent Bridge
+# Local Agent Bridge
 
 This bridge is the first local-agent integration slice. It lets an external process, such as Codex, Claude Code, OpenClaw, or a custom script, control one existing in-game Agent through HTTP while the local server still owns the authoritative match runtime.
 
@@ -84,7 +84,7 @@ Provider-specific helpers are documented in [`provider-bridge-adapters.md`](./pr
 They wrap the same native request/action contract for OpenAI Chat Completions, OpenAI Responses, and Anthropic Messages tool use.
 
 The product-shaped API key facade is documented in [`product-api-key-local-runtime.md`](./product-api-key-local-runtime.md).
-Use `/api/*` endpoints when building a local client that should behave like an installed Agent Jola runtime.
+Use `/api/*` endpoints when building a local client that should behave like an installed AgentPoppy runtime.
 
 ## Minimal Client Loop
 

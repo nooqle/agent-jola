@@ -6,8 +6,8 @@ import cors from "@fastify/cors";
 import websocket from "@fastify/websocket";
 import Fastify, { type FastifyInstance, type FastifyReply, type FastifyRequest } from "fastify";
 import { z } from "zod";
-import { MAP_PRESETS, normalizeMapPresetId } from "@agent-bomber/core";
-import { readDecisionLogFile, readReplayFile } from "@agent-bomber/replay";
+import { MAP_PRESETS, normalizeMapPresetId } from "@agent-poppy/core";
+import { readDecisionLogFile, readReplayFile } from "@agent-poppy/replay";
 import {
   createAnthropicMessagesAgentRequest,
   createOpenAIChatAgentRequest,
@@ -15,7 +15,7 @@ import {
   extractAnthropicMessagesAgentAction,
   extractOpenAIChatAgentAction,
   extractOpenAIResponsesAgentAction
-} from "@agent-bomber/protocol";
+} from "@agent-poppy/protocol";
 import type {
   AgentActionRequest,
   AgentBridgeProvider,
@@ -32,17 +32,15 @@ import type {
   ProductApiUser,
   ProviderAgentActionExtraction,
   SubmitLocalAgentActionRequest
-} from "@agent-bomber/protocol";
+} from "@agent-poppy/protocol";
 import {
   buildLocalAgentPromptFromTemplate,
   getStrategyPromptTemplate,
   listStrategyPromptTemplates,
   type AgentAppearance
-} from "@agent-bomber/strategy";
+} from "@agent-poppy/strategy";
 import {
   ALL_PRODUCT_API_SCOPES,
-  LEGACY_PRODUCT_API_ADMIN_KEY_HEADER,
-  LEGACY_PRODUCT_API_KEY_HEADER,
   configureProductApiKeyStatusLookup,
   issueProductApiKey,
   issueProductApiKeyForUser,
@@ -257,10 +255,7 @@ export async function buildApp(options: BuildAppOptions): Promise<FastifyInstanc
       redact: [
         "req.headers.authorization",
         `req.headers.${PRODUCT_API_KEY_HEADER}`,
-        `req.headers.${LEGACY_PRODUCT_API_KEY_HEADER}`,
         `req.headers.${PRODUCT_API_ADMIN_KEY_HEADER}`,
-        `req.headers.${LEGACY_PRODUCT_API_ADMIN_KEY_HEADER}`,
-        "req.headers.x-agent-jola-portal-token",
         "req.headers.x-agent-poppy-portal-token",
         "req.headers.cookie"
       ]
@@ -305,7 +300,7 @@ export async function buildApp(options: BuildAppOptions): Promise<FastifyInstanc
     "/health",
     async (): Promise<HealthResponse> => ({
       ok: true,
-      service: "agent-bomber-server",
+      service: "agent-poppy-server",
       time: new Date().toISOString()
     })
   );
@@ -368,7 +363,7 @@ export async function buildApp(options: BuildAppOptions): Promise<FastifyInstanc
       provider: "google",
       providerSubject: identity.sub,
       email: identity.email,
-      displayName: identity.name ?? identity.email.split("@")[0] ?? "Agent Jola User",
+      displayName: identity.name ?? identity.email.split("@")[0] ?? "AgentPoppy User",
       ...(identity.picture ? { avatarUrl: identity.picture } : {})
     });
     const session = createPortalSession(options.storage, user);
@@ -398,7 +393,7 @@ export async function buildApp(options: BuildAppOptions): Promise<FastifyInstanc
       provider: "dev",
       providerSubject: body.email.toLowerCase(),
       email: body.email,
-      displayName: body.displayName ?? body.email.split("@")[0] ?? "Agent Jola User"
+      displayName: body.displayName ?? body.email.split("@")[0] ?? "AgentPoppy User"
     };
     if (body.avatarUrl !== undefined) {
       userInput.avatarUrl = body.avatarUrl;
@@ -464,7 +459,7 @@ export async function buildApp(options: BuildAppOptions): Promise<FastifyInstanc
       if (!profile) {
         throw new HttpError(
           409,
-          "Create your Agent Jola chameleon before issuing an API key.",
+          "Create your AgentPoppy chameleon before issuing an API key.",
           "PORTAL_PROFILE_REQUIRED"
         );
       }
@@ -539,7 +534,7 @@ export async function buildApp(options: BuildAppOptions): Promise<FastifyInstanc
     if (!profile) {
       throw new HttpError(
         409,
-        "No hosted Agent Jola profile has been configured for this API key.",
+        "No hosted AgentPoppy profile has been configured for this API key.",
         "RUNTIME_PROFILE_REQUIRED"
       );
     }
@@ -1018,9 +1013,8 @@ export async function buildApp(options: BuildAppOptions): Promise<FastifyInstanc
   return app;
 }
 
-const PORTAL_TOKEN_HEADER = "x-agent-jola-portal-token";
-const LEGACY_PORTAL_TOKEN_HEADER = "x-agent-poppy-portal-token";
-const PORTAL_SESSION_COOKIE = "agent_jola_portal";
+const PORTAL_TOKEN_HEADER = "x-agent-poppy-portal-token";
+const PORTAL_SESSION_COOKIE = "agent_poppy_portal";
 
 interface GoogleOAuthConfig {
   clientId: string;
@@ -1038,8 +1032,7 @@ interface GoogleOAuthIdentity {
 function requireDevPortalLoginEnabled(): void {
   if (
     process.env.NODE_ENV === "production" &&
-    envValue("AGENT_JOLA_ENABLE_DEV_PORTAL_LOGIN", "AGENT_POPPY_ENABLE_DEV_PORTAL_LOGIN") !==
-      "true"
+    envValue("AGENT_POPPY_ENABLE_DEV_PORTAL_LOGIN") !== "true"
   ) {
     throw new HttpError(404, "Portal dev login is disabled.", "PORTAL_DEV_LOGIN_DISABLED");
   }
@@ -1059,19 +1052,17 @@ function createPortalSession(storage: Storage, user: PortalUser): PortalSessionR
 function requirePortalSession(storage: Storage, request: FastifyRequest): PortalUser {
   const token = portalTokenFromRequest(request);
   if (!token) {
-    throw new HttpError(401, "Missing Agent Jola portal session.", "PORTAL_SESSION_INVALID");
+    throw new HttpError(401, "Missing AgentPoppy portal session.", "PORTAL_SESSION_INVALID");
   }
   const user = storage.getPortalUserBySessionTokenHash(hashPortalToken(token));
   if (!user) {
-    throw new HttpError(401, "Missing or invalid Agent Jola portal session.", "PORTAL_SESSION_INVALID");
+    throw new HttpError(401, "Missing or invalid AgentPoppy portal session.", "PORTAL_SESSION_INVALID");
   }
   return user;
 }
 
 function portalTokenFromRequest(request: FastifyRequest): string | undefined {
-  const direct =
-    headerValue(request.headers[PORTAL_TOKEN_HEADER]) ??
-    headerValue(request.headers[LEGACY_PORTAL_TOKEN_HEADER]);
+  const direct = headerValue(request.headers[PORTAL_TOKEN_HEADER]);
   if (direct) {
     return direct.trim();
   }
@@ -1092,7 +1083,7 @@ function hashPortalToken(token: string): string {
 }
 
 function portalSessionTtlMs(): number {
-  const days = Number(envValue("AGENT_JOLA_PORTAL_SESSION_DAYS", "AGENT_POPPY_PORTAL_SESSION_DAYS") || 30);
+  const days = Number(envValue("AGENT_POPPY_PORTAL_SESSION_DAYS") || 30);
   const normalizedDays = Number.isFinite(days) && days > 0 ? days : 30;
   return normalizedDays * 24 * 60 * 60 * 1000;
 }
@@ -1123,7 +1114,7 @@ function createPortalInstallCommand(input: {
     cloudUrl,
     provider: input.provider,
     commands: {
-      clone: "git clone https://github.com/nooqle/agent-jola.git",
+      clone: "git clone https://github.com/nooqle/AgentPoppy.git",
       install: "pnpm install",
       configure,
       syncProfile: "pnpm agent:setting sync",
@@ -1133,8 +1124,8 @@ function createPortalInstallCommand(input: {
     },
     scripts: {
       windowsPowerShell: [
-        "git clone https://github.com/nooqle/agent-jola.git",
-        "cd agent-jola",
+        "git clone https://github.com/nooqle/AgentPoppy.git",
+        "cd AgentPoppy",
         "pnpm install",
         configure,
         "pnpm agent:setting sync",
@@ -1142,8 +1133,8 @@ function createPortalInstallCommand(input: {
         providerCommand
       ].join("\n"),
       posixShell: [
-        "git clone https://github.com/nooqle/agent-jola.git",
-        "cd agent-jola",
+        "git clone https://github.com/nooqle/AgentPoppy.git",
+        "cd AgentPoppy",
         "pnpm install",
         configure,
         "pnpm agent:setting sync",
@@ -1152,16 +1143,16 @@ function createPortalInstallCommand(input: {
       ].join("\n")
     },
     env: {
-      AGENT_JOLA_BASE_URL: baseUrl,
-      AGENT_JOLA_CLOUD_BASE_URL: cloudUrl,
-      AGENT_JOLA_API_KEY: input.apiKey,
-      AGENT_JOLA_PROVIDER: input.provider
+      AGENT_POPPY_BASE_URL: baseUrl,
+      AGENT_POPPY_CLOUD_BASE_URL: cloudUrl,
+      AGENT_POPPY_API_KEY: input.apiKey,
+      AGENT_POPPY_PROVIDER: input.provider
     }
   };
 }
 
 function publicApiBaseUrl(request: FastifyRequest): string {
-  const configured = envValue("AGENT_JOLA_PUBLIC_API_BASE_URL", "AGENT_POPPY_PUBLIC_API_BASE_URL");
+  const configured = envValue("AGENT_POPPY_PUBLIC_API_BASE_URL");
   if (configured) {
     return configured.replace(/\/$/, "");
   }
@@ -1181,12 +1172,8 @@ function headerValue(value: string | string[] | undefined): string | undefined {
   return Array.isArray(value) ? value[0] : value;
 }
 
-function envValue(primary: string, legacy?: string): string {
-  const value = process.env[primary]?.trim();
-  if (value) {
-    return value;
-  }
-  return legacy ? (process.env[legacy]?.trim() ?? "") : "";
+function envValue(name: string): string {
+  return process.env[name]?.trim() ?? "";
 }
 
 function enforceRateLimit(
@@ -1213,7 +1200,7 @@ function corsOriginPolicy(): boolean | string[] {
   if (process.env.NODE_ENV !== "production") {
     return true;
   }
-  const configured = envValue("AGENT_JOLA_CORS_ORIGINS", "AGENT_POPPY_CORS_ORIGINS");
+  const configured = envValue("AGENT_POPPY_CORS_ORIGINS");
   if (!configured) {
     return false;
   }
@@ -1224,11 +1211,8 @@ function corsOriginPolicy(): boolean | string[] {
 }
 
 function googleOAuthConfig(request: FastifyRequest): GoogleOAuthConfig | undefined {
-  const clientId = envValue("AGENT_JOLA_GOOGLE_CLIENT_ID", "AGENT_POPPY_GOOGLE_CLIENT_ID");
-  const clientSecret = envValue(
-    "AGENT_JOLA_GOOGLE_CLIENT_SECRET",
-    "AGENT_POPPY_GOOGLE_CLIENT_SECRET"
-  );
+  const clientId = envValue("AGENT_POPPY_GOOGLE_CLIENT_ID");
+  const clientSecret = envValue("AGENT_POPPY_GOOGLE_CLIENT_SECRET");
   if (!clientId || !clientSecret) {
     return undefined;
   }
@@ -1236,7 +1220,7 @@ function googleOAuthConfig(request: FastifyRequest): GoogleOAuthConfig | undefin
     clientId,
     clientSecret,
     redirectUri:
-      envValue("AGENT_JOLA_GOOGLE_REDIRECT_URI", "AGENT_POPPY_GOOGLE_REDIRECT_URI") ||
+      envValue("AGENT_POPPY_GOOGLE_REDIRECT_URI") ||
       `${publicApiBaseUrl(request)}/api/auth/google/callback`
   };
 }
@@ -1619,7 +1603,7 @@ function resolveSafeWebPath(webDistDir: string, requestPath: string): string {
 }
 
 function pathFromRequest(request: FastifyRequest): string {
-  return new URL(request.url, "http://agent-jola.local").pathname;
+  return new URL(request.url, "http://agent-poppy.local").pathname;
 }
 
 function isApiLikePath(request: FastifyRequest): boolean {

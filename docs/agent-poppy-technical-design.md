@@ -1,4 +1,4 @@
-# Agent Jola 对话驱动格子爆破对战技术设计
+# AgentPoppy 对话驱动格子爆破对战技术设计
 
 ## 1. 设计目标
 
@@ -111,8 +111,8 @@ packages/
       reader.ts
       summary.ts
 docs/
-  docs/agent-jola-game-design.md
-  docs/agent-jola-technical-design.md
+  docs/agent-poppy-game-design.md
+  docs/agent-poppy-technical-design.md
 ```
 
 拆分原则：

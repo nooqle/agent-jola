@@ -1,11 +1,11 @@
-# Agent Jola Agent Pack
+# AgentPoppy Agent Pack
 
-This folder contains instructions for letting local Agents install, authorize, configure, and validate Agent Jola.
+This folder contains instructions for letting local Agents install, authorize, configure, and validate AgentPoppy.
 
 Use the Codex skill when available:
 
 ```txt
-skills/agent-jola
+skills/agent-poppy
 ```
 
 Use the platform-specific instruction files when the Agent does not support Codex skills:

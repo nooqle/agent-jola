@@ -3,8 +3,8 @@ import {
   buildLocalAgentPromptFromTemplate,
   getStrategyPromptTemplate,
   listStrategyPromptTemplates
-} from "@agent-bomber/strategy";
-import { AgentPoppyClient, envValueAny } from "./client.js";
+} from "@agent-poppy/strategy";
+import { AgentPoppyClient, envValue } from "./client.js";
 
 type TemplateCommand = "list" | "show" | "prompt" | "apply" | "help";
 
@@ -41,9 +41,7 @@ function parseArgs(argv: string[]): ParsedArgs {
   return {
     command,
     templateId,
-    agentName:
-      optionValue(argv, "--agent") ??
-      envValueAny(["AGENT_JOLA_AGENT_NAME", "AGENT_POPPY_AGENT_NAME"], "Local Agent"),
+    agentName: optionValue(argv, "--agent") ?? envValue("AGENT_POPPY_AGENT_NAME", "Local Agent"),
     strategyText: optionValue(argv, "--strategy")
   };
 }
@@ -60,7 +58,7 @@ function optionValue(argv: string[], name: string): string | undefined {
 }
 
 function printTemplateList(): void {
-  console.log("Agent Jola strategy prompt templates:");
+  console.log("AgentPoppy strategy prompt templates:");
   for (const template of listStrategyPromptTemplates()) {
     console.log(`- ${template.id}: ${template.title} (${template.tag})`);
     console.log(`  ${template.summary}`);
@@ -136,7 +134,7 @@ function requireTemplate(templateId: string | undefined) {
 }
 
 function printHelp(): void {
-  console.log(`Agent Jola template CLI
+  console.log(`AgentPoppy template CLI
 
 Usage:
   pnpm agent:templates

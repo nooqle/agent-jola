@@ -1,0 +1,8 @@
+interface:
+  display_name: "AgentPoppy"
+  short_description: "Set up and validate local AgentPoppy"
+  brand_color: "#F6C453"
+  default_prompt: "Use $agent-poppy to install AgentPoppy locally, sync my chameleon profile, confirm a battle Prompt, and verify my Agent can join a room."
+
+policy:
+  allow_implicit_invocation: true

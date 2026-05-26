@@ -18,9 +18,9 @@ RUN pnpm build
 ENV NODE_ENV=production
 ENV HOST=0.0.0.0
 ENV PORT=3001
-ENV AGENT_BOMBER_DATA_DIR=/app/data
-ENV AGENT_JOLA_WEB_DIST=/app/apps/web/dist
+ENV AGENT_POPPY_DATA_DIR=/app/data
+ENV AGENT_POPPY_WEB_DIST=/app/apps/web/dist
 
 EXPOSE 3001
 
-CMD ["pnpm", "--filter", "@agent-bomber/server", "start"]
+CMD ["pnpm", "--filter", "@agent-poppy/server", "start"]

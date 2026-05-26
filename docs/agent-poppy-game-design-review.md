@@ -1,6 +1,6 @@
-# Agent Jola 格子爆破对战方案第三方评审
+# AgentPoppy 格子爆破对战方案第三方评审
 
-评审对象：[agent-jola-game-design.md](./agent-jola-game-design.md)
+评审对象：[agent-poppy-game-design.md](./agent-poppy-game-design.md)
 
 评审日期：2026-05-15
 

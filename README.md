@@ -1,192 +1,203 @@
-# Agent Jola
+# AgentPoppy
 
-Agent Jola is a local-first battle arena for AI Agents. Each player creates one pixel chameleon identity on the portal, copies a prompt and Product API key to their local Agent, then lets Codex, Claude Code, OpenAI, Anthropic, OpenClaw, or a custom script play in a 4-player shrinking-zone match.
+AgentPoppy 是一个本地优先的 AI Agent 对战 Workbench。你把 Product API key 交给本地 Agent，Agent 会进入房间、Ready、读取战场观察、提交行动，最后在 4 人毒圈乱斗里生成战报、复盘和决策日志。
 
-The project is a Developer Preview. The core goal is to make an open-source game runtime that runs on a user's machine while still supporting a hosted identity, prompt-template, and API-key layer.
+当前项目处于 Developer Preview。目标不是做一个只能在线上跑的小游戏，而是把 Agent 的策略、执行和复盘变成一套能在用户自己机器上运行、可验证、可扩展的开放运行时。
 
-## What is Agent Jola?
+> 命名说明：项目对外名称、安装路径、API header、环境变量和 GitHub 仓库都统一为 AgentPoppy。
 
-Agent Jola turns Agent behavior into a watchable game loop.
+## 快速导航
 
-- The player owns one chameleon character.
-- The player chooses or edits a natural-language battle strategy.
-- The portal issues a Product API key for the local runtime.
-- The local Agent connects through a small HTTP bridge.
-- The game records state, replay, match result, and decision logs.
+[为什么是 AgentPoppy](#为什么是-agentpoppy) · [核心能力](#核心能力) · [3 分钟跑起来](#3-分钟跑起来) · [本地房间页](#本地房间页) · [环境变量](#环境变量) · [部署](#部署) · [开发验证](#开发验证)
 
-The first playable mode is a 4-Agent arena: a large randomized tile map, bombs, walls, items, and a safe zone that shrinks toward a random final area.
+## 为什么是 AgentPoppy
 
-## Features
+传统的 Agent Demo 往往只展示一次调用结果，AgentPoppy 更关注 Agent 在连续环境里的行为：它是否会保命，是否理解安全区，是否会在有退路时进攻，失败后能不能通过复盘改策略。
 
-- **Local-first runtime**: run the server, web UI, simulator, and Agent bridge on your own machine.
-- **Hosted identity layer**: Google login, one chameleon profile, strategy profile, Product API key, and Agent handoff prompts.
-- **Agent-ready bridge**: local self-check Agent, OpenAI Responses API adapter, Anthropic Messages API adapter, and provider-neutral prompt templates.
-- **Deterministic game core**: seeded map generation, tick-based simulation, replay files, and decision logs.
-- **Battle royale rules**: 4-player default mode, randomized terrain, items, bombs, destructible walls, and shrinking safe zone.
-- **Developer validation**: unit tests, simulator checks, release smoke tests, install smoke tests, and security audit scripts.
+| 维度 | 普通聊天式 Agent Demo | AgentPoppy |
+| :-- | :-- | :-- |
+| Agent 行为 | 一次性输出文本 | 连续观察、决策、提交动作 |
+| 运行位置 | 多依赖云端服务 | 本地服务器、本地数据、本地模型 key |
+| 进入流程 | 用户先登录页面 | 拿到 Product API key 后直接进入本地房间 |
+| 多 Agent 协作 | 难验证 | 4 人房间、Ready 状态、开局、复盘 |
+| 结果证据 | 聊天记录为主 | match record、replay、decision log |
 
-## Installation
+## 核心能力
 
-Requirements:
+- **本地优先运行时**：server、web UI、simulator 和 local-agent bridge 都能在本机运行。
+- **默认房间等待页**：打开 `/local` 会恢复或创建一个本地默认房间，不再强制 Portal 登录。
+- **Product API key 接入**：本地 Agent 使用 key 访问房间、角色、模板和 bridge API。
+- **Agent bridge**：内置 mock Agent、自检流程、OpenAI Responses adapter、Anthropic Messages adapter。
+- **4 人毒圈乱斗**：大地图、随机软墙、道具、水泡、爆炸和逐步收缩的安全区。
+- **可复盘输出**：每局生成对局记录、replay 文件和 Agent 决策日志。
+- **开发者验证门槛**：doctor、build、lint、test、release smoke、install smoke 和安全审计脚本。
+
+## 3 分钟跑起来
+
+要求：
 
 - Node.js 22.13+
 - pnpm 10+
 
 ```bash
-git clone https://github.com/nooqle/agent-jola.git
-cd agent-jola
+git clone https://github.com/nooqle/AgentPoppy.git
+cd AgentPoppy
 corepack enable
 pnpm install
 pnpm dev
 ```
 
-Default local URLs:
+默认地址：
 
-- Web / Portal: `http://127.0.0.1:5173/`
-- Server API: `http://127.0.0.1:3001`
+- 本地房间页：`http://127.0.0.1:3001/local`
+- 本地 Workbench：`http://127.0.0.1:3001/workbench`
+- Vite 开发页面：`http://127.0.0.1:5173/`
+- Server API：`http://127.0.0.1:3001`
 
-If the Vite port is busy, use the URL printed by the terminal.
+如果 Vite 端口被占用，以终端实际打印的 URL 为准。
 
-## Docker
+## 本地房间页
 
-To run the release-style single-port server:
+AgentPoppy 的本地体验以 `/local` 为入口。页面会优先使用浏览器保存的 Product API key；如果在本机打开且使用默认开发 key，会直连同一台本地运行时。
 
-```bash
-docker compose up --build
-```
+本地房间页会展示：
 
-Then open:
+- 邀请码和 Room ID
+- 当前参与者列表
+- 每个参与者的 Ready 状态
+- 当前 Agent bridge 在线状态
+- 复制邀请码、刷新、Ready、开始对战
 
-```txt
-http://127.0.0.1:3001/
-```
+这解决了一个关键流程问题：拿到 API key 后，用户不应该再被要求登录 Portal。Portal 是创建角色、生成 key 和复制 Agent 任务的地方；本地页面应该直接进入等待房间。
 
-Match data, replay files, and decision logs are written to the `agent-jola-data` Docker volume.
+## 本地 Agent 自检
 
-## Quick Start: Local Agent Match
-
-Start the local app:
+启动本地应用：
 
 ```bash
 pnpm dev
 ```
 
-In another terminal, initialize local Agent settings:
+另开一个终端初始化本地 Agent 设置：
 
 ```bash
 pnpm agent:setting init
 pnpm agent:setting check
 ```
 
-Run the local connection self-check Agent:
+运行不消耗模型 token 的 mock Agent：
 
 ```bash
 pnpm agent:mock
 ```
 
-This check does not use model tokens. It is the fastest way to verify rooms, prompts, actions, and match playback.
+这个自检会验证 key、角色、房间、Prompt 模板、bridge 连接和行动提交，是接入 Codex、Claude Code、OpenClaw 或自定义 Agent 前最快的检查方式。
 
-## Quick Start: Prompt Templates
+## Prompt 模板
 
-List available templates:
+查看模板：
 
 ```bash
 pnpm agent:templates
 ```
 
-Generate a prompt that can be copied into Codex, Claude Code, OpenClaw, or another local Agent:
+生成可复制给本地 Agent 的作战 Prompt：
 
 ```bash
-pnpm agent:template prompt zoneHunter --agent Ember
+pnpm agent:template prompt zoneHunter --agent Poppy
 ```
 
-Apply a template to the local Agent profile:
+把模板应用到本地 Agent profile：
 
 ```bash
-AGENT_JOLA_API_KEY=agent-jola-local-dev-key pnpm agent:template apply zoneHunter --agent Ember
+AGENT_POPPY_API_KEY=agent-poppy-local-dev-key pnpm agent:template apply zoneHunter --agent Poppy
 ```
 
-Current templates:
+当前模板：
 
-- `safeAttack`: balanced pressure with survival first.
-- `farmControl`: break walls early, collect items, then pressure.
-- `survivor`: low-risk survival and escape spacing.
-- `zoneHunter`: reach the safe zone first, then attack from the edge.
+- `safeAttack`：稳健进攻，先保命再压制。
+- `farmControl`：开局破墙吃道具，能力成型后接战。
+- `survivor`：低风险生存，危险窗口提前撤离。
+- `zoneHunter`：先进安全区，再从圈边压缩对手。
 
-## Model Providers
+## 模型 Provider
 
-Provider API keys stay on the user's local machine. They are not uploaded to the Agent Jola portal.
+OpenAI、Anthropic 等 provider key 只保存在用户本机，不会上传到 Portal。
 
-OpenAI Responses API:
+OpenAI Responses API：
 
 ```bash
-AGENT_JOLA_API_KEY=agent-jola-local-dev-key \
+AGENT_POPPY_API_KEY=agent-poppy-local-dev-key \
 OPENAI_API_KEY=sk-... \
 OPENAI_MODEL=gpt-4.1 \
 pnpm agent:openai
 ```
 
-Anthropic Messages API:
+Anthropic Messages API：
 
 ```bash
-AGENT_JOLA_API_KEY=agent-jola-local-dev-key \
+AGENT_POPPY_API_KEY=agent-poppy-local-dev-key \
 ANTHROPIC_API_KEY=... \
 ANTHROPIC_MODEL=claude-sonnet-4-20250514 \
 pnpm agent:anthropic
 ```
 
-Bridge details:
+相关文档：
 
 - [Local Agent bridge](./docs/local-agent-bridge.md)
 - [Provider bridge adapters](./docs/provider-bridge-adapters.md)
 - [Local Agent settings](./docs/local-agent-settings.md)
-- [Agent pack for Codex, Claude Code, OpenClaw, OpenAI, and Anthropic](./docs/agent-pack/index.md)
+- [Agent pack](./docs/agent-pack/index.md)
 
-## Product API Key Flow
+## 环境变量
 
-For local development, the default Product API key is:
+本地开发从 `.env.example` 复制：
 
-```txt
-agent-jola-local-dev-key
+```bash
+cp .env.example .env
 ```
 
-For hosted preview usage:
+关键变量：
 
-1. Sign in to the Agent Jola portal.
-2. Create your chameleon profile.
-3. Choose or edit a battle strategy.
-4. Create a Product API key.
-5. Copy the Agent handoff task and prompt template into your local Agent environment.
-6. Run `pnpm agent:setting sync` to pull your hosted profile into the local runtime.
+| 变量 | 用途 |
+| :-- | :-- |
+| `AGENT_POPPY_API_KEY` | 本地 Agent 访问 Product API 的 key。开发默认值是 `agent-poppy-local-dev-key`。 |
+| `AGENT_POPPY_ADMIN_KEY` | 管理员签发或吊销 Product API key 时使用。 |
+| `AGENT_POPPY_KEY_ISSUER_SECRET` | 签发 `ap_issued_...` key 的 HMAC secret，生产必须使用长随机值。 |
+| `AGENT_POPPY_PUBLIC_API_BASE_URL` | 线上 Portal/API 对外地址，用于 OAuth redirect 和安装命令。 |
+| `AGENT_POPPY_CORS_ORIGINS` | 生产 CORS 白名单，本地样例只放 localhost。 |
+| `OPENAI_API_KEY` / `ANTHROPIC_API_KEY` | 可选，本地 standalone provider adapter 才需要。 |
 
-More details:
+我对样例文件的判断：
 
-- [Hosted Product API](./docs/hosted-product-api.md)
-- [Product API key runtime](./docs/product-api-key-local-runtime.md)
-- [Install preview](./docs/install-preview.md)
-- [Agent Jola skill pack](./skills/agent-jola/SKILL.md)
+- 本地 `.env.example` 不应该默认写线上 CORS 域名，否则新人复制后容易误判本地/线上边界。
+- 生产 `.env.production.example` 不应该塞真实域名和弱 secret，应该使用占位域名并让 `doctor:production` 拦截。
+- 项目命名已经统一为 AgentPoppy，样例变量只保留 `AGENT_POPPY_*`。
 
-## Game Mode
+## Docker
 
-The Developer Preview focuses on one mode:
+单端口 release-style 启动：
 
-- 4 Agent free-for-all.
-- Large randomized map.
-- Random soft-wall and item distribution per seed.
-- Safe zone shrinks in stages.
-- Last surviving Agent wins.
-- Match output includes record, replay, and decision log.
+```bash
+docker compose up --build
+```
 
-The current version does not include public matchmaking, payment, manual human control, or a production relay service.
+打开：
 
-## Project Structure
+```txt
+http://127.0.0.1:3001/local
+```
+
+对局记录、复盘文件和决策日志写入 `agent-poppy-data` volume。
+
+## 项目结构
 
 ```txt
 apps/
   web/          React + Phaser client
   server/       Fastify server, portal API, rooms, matches, runtime sync
   sim/          simulation CLI
-  local-agent/  self-check, OpenAI, and Anthropic local Agent clients
+  local-agent/  mock, OpenAI, Anthropic local Agent clients
 packages/
   core/         deterministic game engine
   agent/        planner, danger map, BFS, decision logging
@@ -195,28 +206,28 @@ packages/
   replay/       replay and decision-log formats
 ```
 
-## Validation
+## 开发验证
 
-Run the full Developer Preview gate:
+完整 Developer Preview gate：
 
 ```bash
 pnpm verify:alpha
 ```
 
-Individual checks:
+常用单项检查：
 
 ```bash
-pnpm doctor
+pnpm run doctor
 pnpm build
 pnpm lint
 pnpm test
 pnpm smoke:release
 pnpm smoke:install
-pnpm doctor:production
+pnpm run doctor:production
 pnpm audit:security
 ```
 
-Simulator commands:
+模拟器：
 
 ```bash
 pnpm sim:once
@@ -224,26 +235,33 @@ pnpm sim:batch
 pnpm sim:benchmark
 ```
 
-## Deployment Notes
+## 当前限制
 
-The recommended first hosted preview is a small Google Compute Engine VM with Docker Compose, because the current runtime uses SQLite and local replay files.
+- 还没有公开 matchmaking 队列。
+- 还没有房间列表和房间详情路由，当前重点是 `/local` 当前房间等待页。
+- 线上 relay、支付和多人公网联机仍在设计阶段。
+- GitHub 仓库、README、文档、skill 路径和本地页面都已统一到 AgentPoppy。
 
-For the production path, see:
+## 部署
+
+当前推荐的首个线上预览形态是小型 VM + Docker Compose，因为运行时仍使用 SQLite 和本地 replay 文件。
+
+参考：
 
 - [Deployment recommendation](./docs/deployment-recommendation.md)
 - [Production Alpha plan](./docs/production-alpha-plan.md)
 - [Relay spike](./docs/relay-spike.md)
 - [Security review](./docs/security-review.md)
 
-## Design Docs
+## 设计文档
 
 - [Product platform design](./docs/product-platform-design.md)
-- [Game design](./docs/agent-jola-game-design.md)
-- [Technical design](./docs/agent-jola-technical-design.md)
+- [Game design](./docs/agent-poppy-game-design.md)
+- [Technical design](./docs/agent-poppy-technical-design.md)
 - [Room lifecycle API](./docs/room-lifecycle-api.md)
 
 ## License
 
-Agent Jola is released under the MIT License. See [LICENSE](./LICENSE).
+AgentPoppy 使用 MIT License。见 [LICENSE](./LICENSE)。
 
-Social Chameleon pixel character assets keep their original MIT License. See [apps/web/public/skins/social-chameleon/LICENSE](./apps/web/public/skins/social-chameleon/LICENSE).
+Social Chameleon pixel character assets 保留其原始 MIT License。见 [apps/web/public/skins/social-chameleon/LICENSE](./apps/web/public/skins/social-chameleon/LICENSE)。

@@ -40,10 +40,10 @@ importers:
 
   apps/local-agent:
     dependencies:
-      "@agent-bomber/protocol":
+      "@agent-poppy/protocol":
         specifier: workspace:*
         version: link:../../packages/protocol
-      "@agent-bomber/strategy":
+      "@agent-poppy/strategy":
         specifier: workspace:*
         version: link:../../packages/strategy
     devDependencies:
@@ -53,19 +53,19 @@ importers:
 
   apps/server:
     dependencies:
-      "@agent-bomber/agent":
+      "@agent-poppy/agent":
         specifier: workspace:*
         version: link:../../packages/agent
-      "@agent-bomber/core":
+      "@agent-poppy/core":
         specifier: workspace:*
         version: link:../../packages/core
-      "@agent-bomber/protocol":
+      "@agent-poppy/protocol":
         specifier: workspace:*
         version: link:../../packages/protocol
-      "@agent-bomber/replay":
+      "@agent-poppy/replay":
         specifier: workspace:*
         version: link:../../packages/replay
-      "@agent-bomber/strategy":
+      "@agent-poppy/strategy":
         specifier: workspace:*
         version: link:../../packages/strategy
       "@fastify/cors":
@@ -90,16 +90,16 @@ importers:
 
   apps/sim:
     dependencies:
-      "@agent-bomber/agent":
+      "@agent-poppy/agent":
         specifier: workspace:*
         version: link:../../packages/agent
-      "@agent-bomber/core":
+      "@agent-poppy/core":
         specifier: workspace:*
         version: link:../../packages/core
-      "@agent-bomber/replay":
+      "@agent-poppy/replay":
         specifier: workspace:*
         version: link:../../packages/replay
-      "@agent-bomber/strategy":
+      "@agent-poppy/strategy":
         specifier: workspace:*
         version: link:../../packages/strategy
     devDependencies:
@@ -109,16 +109,16 @@ importers:
 
   apps/web:
     dependencies:
-      "@agent-bomber/core":
+      "@agent-poppy/core":
         specifier: workspace:*
         version: link:../../packages/core
-      "@agent-bomber/protocol":
+      "@agent-poppy/protocol":
         specifier: workspace:*
         version: link:../../packages/protocol
-      "@agent-bomber/replay":
+      "@agent-poppy/replay":
         specifier: workspace:*
         version: link:../../packages/replay
-      "@agent-bomber/strategy":
+      "@agent-poppy/strategy":
         specifier: workspace:*
         version: link:../../packages/strategy
       "@vitejs/plugin-react":
@@ -152,10 +152,10 @@ importers:
 
   packages/agent:
     dependencies:
-      "@agent-bomber/core":
+      "@agent-poppy/core":
         specifier: workspace:*
         version: link:../core
-      "@agent-bomber/strategy":
+      "@agent-poppy/strategy":
         specifier: workspace:*
         version: link:../strategy
 
@@ -163,22 +163,22 @@ importers:
 
   packages/protocol:
     dependencies:
-      "@agent-bomber/core":
+      "@agent-poppy/core":
         specifier: workspace:*
         version: link:../core
-      "@agent-bomber/replay":
+      "@agent-poppy/replay":
         specifier: workspace:*
         version: link:../replay
-      "@agent-bomber/strategy":
+      "@agent-poppy/strategy":
         specifier: workspace:*
         version: link:../strategy
 
   packages/replay:
     dependencies:
-      "@agent-bomber/core":
+      "@agent-poppy/core":
         specifier: workspace:*
         version: link:../core
-      "@agent-bomber/strategy":
+      "@agent-poppy/strategy":
         specifier: workspace:*
         version: link:../strategy
 

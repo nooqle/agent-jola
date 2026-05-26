@@ -1,4 +1,4 @@
-﻿# Product API key local runtime
+# Product API key local runtime
 
 This is the first product-shaped API layer for local Agent clients.
 It is still a local development version, not a hosted account system.
@@ -7,32 +7,32 @@ It is still a local development version, not a hosted account system.
 
 There are three separate keys/protocols:
 
-- `AGENT_JOLA_API_KEY`: authenticates a local client to Agent Jola's product API.
+- `AGENT_POPPY_API_KEY`: authenticates a local client to AgentPoppy's product API.
 - `OPENAI_API_KEY`: lets a local client call OpenAI.
 - `ANTHROPIC_API_KEY`: lets a local client call Anthropic.
 
-Agent Jola never stores OpenAI or Anthropic keys.
-The local Agent client owns those provider calls and submits only the model's selected game action back to Agent Jola.
+AgentPoppy never stores OpenAI or Anthropic keys.
+The local Agent client owns those provider calls and submits only the model's selected game action back to AgentPoppy.
 
 ## Local key
 
 For local development, the server accepts this default key unless `NODE_ENV=production`:
 
 ```txt
-agent-jola-local-dev-key
+agent-poppy-local-dev-key
 ```
 
 You can override it:
 
 ```powershell
-$env:AGENT_JOLA_API_KEY="your-local-product-key"
-pnpm --filter @agent-bomber/server start
+$env:AGENT_POPPY_API_KEY="your-local-product-key"
+pnpm --filter @agent-poppy/server start
 ```
 
 You can limit a key with scopes by appending `|scope+scope`:
 
 ```powershell
-$env:AGENT_JOLA_API_KEY="viewer-key|profile:read+rooms:read"
+$env:AGENT_POPPY_API_KEY="viewer-key|profile:read+rooms:read"
 ```
 
 Supported scopes:
@@ -50,15 +50,15 @@ Supported scopes:
 For the local Alpha, the server can also issue signed Product API keys. Configure:
 
 ```powershell
-$env:AGENT_JOLA_ADMIN_KEY="agent-jola-local-admin-key"
-$env:AGENT_JOLA_KEY_ISSUER_SECRET="replace-with-a-long-random-local-secret"
+$env:AGENT_POPPY_ADMIN_KEY="agent-poppy-local-admin-key"
+$env:AGENT_POPPY_KEY_ISSUER_SECRET="replace-with-a-long-random-local-secret"
 ```
 
 Issue a key:
 
 ```http
 POST /api/admin/product-keys
-X-Agent-Jola-Admin-Key: agent-jola-local-admin-key
+X-Agent-Poppy-Admin-Key: agent-poppy-local-admin-key
 Content-Type: application/json
 
 {
@@ -68,20 +68,20 @@ Content-Type: application/json
 }
 ```
 
-The response contains an `id` plus a signed `ap_issued_...` key. Use the key through `X-Agent-Jola-Key` or `Authorization: Bearer ...` like any other Product API key.
+The response contains an `id` plus a signed `ap_issued_...` key. Use the key through `X-Agent-Poppy-Key` or `Authorization: Bearer ...` like any other Product API key.
 
 List issued keys:
 
 ```http
 GET /api/admin/product-keys
-X-Agent-Jola-Admin-Key: agent-jola-local-admin-key
+X-Agent-Poppy-Admin-Key: agent-poppy-local-admin-key
 ```
 
 Revoke an issued key:
 
 ```http
 POST /api/admin/product-keys/key_xxx/revoke
-X-Agent-Jola-Admin-Key: agent-jola-local-admin-key
+X-Agent-Poppy-Admin-Key: agent-poppy-local-admin-key
 ```
 
 Revoked keys are rejected immediately by `/api/*` endpoints. Issued keys are recorded in local SQLite; configured env keys still work for simple local development.
@@ -91,7 +91,7 @@ This admin issuer is still useful for local self-hosting. The hosted product pat
 Clients may pass the key through either:
 
 ```http
-X-Agent-Jola-Key: your-local-product-key
+X-Agent-Poppy-Key: your-local-product-key
 ```
 
 or:
@@ -135,7 +135,7 @@ Quotas are intentionally unlimited by default for the local MVP. `/api/me` expos
 `null` means unlimited. You can override the policy for local testing:
 
 ```powershell
-$env:AGENT_JOLA_QUOTAS="room_create=100,template_apply=20,bridge_prompt=unlimited"
+$env:AGENT_POPPY_QUOTAS="room_create=100,template_apply=20,bridge_prompt=unlimited"
 ```
 
 Finite quotas are enforced by the local server and stored in SQLite. When a quota is exhausted, the API returns `429 PRODUCT_API_QUOTA_EXCEEDED`.
@@ -150,7 +150,7 @@ Current quota mapping:
 
 ## Product API facade
 
-All endpoints below require the Agent Jola API key.
+All endpoints below require the AgentPoppy API key.
 The older local Web/API endpoints remain unchanged so the current UI keeps working.
 
 ```http
@@ -198,7 +198,7 @@ pnpm dev
 In another terminal:
 
 ```powershell
-$env:AGENT_JOLA_API_KEY="agent-jola-local-dev-key"
+$env:AGENT_POPPY_API_KEY="agent-poppy-local-dev-key"
 pnpm agent:mock
 ```
 
@@ -230,7 +230,7 @@ pnpm agent:template prompt zoneHunter --agent Ember
 Apply a template to the local profile Agent through the product API:
 
 ```powershell
-$env:AGENT_JOLA_API_KEY="agent-jola-local-dev-key"
+$env:AGENT_POPPY_API_KEY="agent-poppy-local-dev-key"
 pnpm agent:template apply zoneHunter --agent Ember
 ```
 
@@ -266,14 +266,14 @@ The detail endpoint returns the template plus a full `localAgentPrompt` string. 
 
 ## Use the local SDK
 
-The `@agent-bomber/local-agent` package now exposes a small TypeScript client wrapper around the product API:
+The `@agent-poppy/local-agent` package now exposes a small TypeScript client wrapper around the product API:
 
 ```ts
-import { AgentJolaClient } from "@agent-bomber/local-agent";
+import { AgentPoppyClient } from "@agent-poppy/local-agent";
 
-const client = new AgentJolaClient({
+const client = new AgentPoppyClient({
   baseUrl: "http://127.0.0.1:3001",
-  apiKey: "agent-jola-local-dev-key"
+  apiKey: "agent-poppy-local-dev-key"
 });
 
 const profile = await client.profile();
@@ -292,7 +292,7 @@ await client.setRoomReady(room.id, true);
 ## Run an OpenAI local Agent
 
 ```powershell
-$env:AGENT_JOLA_API_KEY="agent-jola-local-dev-key"
+$env:AGENT_POPPY_API_KEY="agent-poppy-local-dev-key"
 $env:OPENAI_API_KEY="sk-..."
 $env:OPENAI_MODEL="gpt-4.1"
 pnpm agent:openai
@@ -313,7 +313,7 @@ POST /api/bridge/agents/:agentId/action/openai-responses
 ## Run an Anthropic local Agent
 
 ```powershell
-$env:AGENT_JOLA_API_KEY="agent-jola-local-dev-key"
+$env:AGENT_POPPY_API_KEY="agent-poppy-local-dev-key"
 $env:ANTHROPIC_API_KEY="<local-anthropic-key>"
 $env:ANTHROPIC_MODEL="claude-sonnet-4-20250514"
 pnpm agent:anthropic
@@ -334,16 +334,16 @@ POST /api/bridge/agents/:agentId/action/anthropic-messages
 ## Runtime knobs
 
 ```powershell
-$env:AGENT_JOLA_BASE_URL="http://127.0.0.1:3001"
-$env:AGENT_JOLA_MAX_POLLS="240"
-$env:AGENT_JOLA_POLL_MS="150"
+$env:AGENT_POPPY_BASE_URL="http://127.0.0.1:3001"
+$env:AGENT_POPPY_MAX_POLLS="240"
+$env:AGENT_POPPY_POLL_MS="150"
 ```
 
 ## Production direction
 
 This local API key shape now has a matching hosted service contract:
 
-- hosted signup/login issues a scoped `AGENT_JOLA_API_KEY`
+- hosted signup/login issues a scoped `AGENT_POPPY_API_KEY`
 - local runtime uses that key to pull the user's character and strategy from `/api/runtime/profile`
 - room creation and joining become cloud-authorized
 - actual simulation can still run locally or move to a low-cost relay later

@@ -19,7 +19,7 @@ import type {
   LocalAgentControllerStatus,
   RoomParticipant,
   RoomRecord
-} from "@agent-bomber/protocol";
+} from "@agent-poppy/protocol";
 import {
   ApiRequestError,
   clearLocalProductApiKey,
@@ -160,7 +160,7 @@ export function LocalRoom({ onOpenMatch }: { onOpenMatch: (match: MatchRecord) =
   const submitApiKey = () => {
     const trimmed = draftApiKey.trim();
     if (!trimmed) {
-      setError("请粘贴 Agent Jola Product API key。");
+      setError("请粘贴 AgentPoppy Product API key。");
       return;
     }
     saveLocalProductApiKey(trimmed);
@@ -396,7 +396,7 @@ function LocalApiKeyGate({
             value={apiKey}
             type="password"
             autoComplete="off"
-            placeholder="ap_issued_... 或 agent-jola-local-dev-key"
+            placeholder="ap_issued_... 或 agent-poppy-local-dev-key"
             onChange={(event) => onApiKeyChange(event.target.value)}
             onKeyDown={(event) => {
               if (event.key === "Enter") {

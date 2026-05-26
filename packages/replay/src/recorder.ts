@@ -1,5 +1,5 @@
-import { ENGINE_VERSION, RULES_VERSION, type DecisionLogEntry, type GameEvent, type MatchRecord, type MatchState } from "@agent-bomber/core";
-import type { AgentStrategyVersion } from "@agent-bomber/strategy";
+import { ENGINE_VERSION, RULES_VERSION, type DecisionLogEntry, type GameEvent, type MatchRecord, type MatchState } from "@agent-poppy/core";
+import type { AgentStrategyVersion } from "@agent-poppy/strategy";
 import type { KeyEvent, ReplayFile, ReplayFrame } from "./types.js";
 
 export interface ReplayRecorderOptions {

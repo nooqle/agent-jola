@@ -1,4 +1,4 @@
-﻿# Room Lifecycle API
+# Room Lifecycle API
 
 The room layer sits above match creation. It models a battle-royale waiting flow before a 4-agent royale match starts.
 
@@ -60,7 +60,7 @@ Join through an invite code:
 
 ```http
 POST /api/rooms/join
-X-Agent-Jola-Key: your-local-product-key
+X-Agent-Poppy-Key: your-local-product-key
 Content-Type: application/json
 
 {
@@ -73,7 +73,7 @@ Invite code lookup:
 
 ```http
 GET /api/rooms/invite/AP-ABC123
-X-Agent-Jola-Key: your-local-product-key
+X-Agent-Poppy-Key: your-local-product-key
 ```
 
 Leave a room:

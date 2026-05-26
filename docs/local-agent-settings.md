@@ -29,8 +29,8 @@ Non-interactive mock Agent setup:
 ```powershell
 pnpm agent:setting write --yes `
   --base-url http://127.0.0.1:3001 `
-  --cloud-url https://agentjola.art `
-  --api-key agent-jola-local-dev-key `
+  --cloud-url https://agentpoppy.example.com `
+  --api-key agent-poppy-local-dev-key `
   --agent Ember `
   --provider mock
 ```
@@ -39,7 +39,7 @@ OpenAI local Agent setup:
 
 ```powershell
 pnpm agent:setting write --yes `
-  --cloud-url https://agentjola.art `
+  --cloud-url https://agentpoppy.example.com `
   --api-key ap_issued_xxx `
   --agent Ember `
   --provider openai `
@@ -51,7 +51,7 @@ Anthropic local Agent setup:
 
 ```powershell
 pnpm agent:setting write --yes `
-  --cloud-url https://agentjola.art `
+  --cloud-url https://agentpoppy.example.com `
   --api-key ap_issued_xxx `
   --agent Ember `
   --provider anthropic `
@@ -61,13 +61,13 @@ pnpm agent:setting write --yes `
 
 ## Sync hosted profile into local runtime
 
-When the API key comes from the Agent Jola website, use:
+When the API key comes from the AgentPoppy website, use:
 
 ```powershell
 pnpm agent:setting sync
 ```
 
-`sync` pulls `GET /api/runtime/profile` from `AGENT_JOLA_CLOUD_BASE_URL` and applies that chameleon appearance plus strategy to the local runtime at `AGENT_JOLA_BASE_URL`.
+`sync` pulls `GET /api/runtime/profile` from `AGENT_POPPY_CLOUD_BASE_URL` and applies that chameleon appearance plus strategy to the local runtime at `AGENT_POPPY_BASE_URL`.
 
 ## Run after settings
 

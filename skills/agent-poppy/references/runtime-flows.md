@@ -2,7 +2,7 @@
 
 ## Hosted Profile Sync
 
-The Product API key belongs to the hosted Agent Jola account. `pnpm agent:setting sync` pulls:
+The Product API key belongs to the hosted AgentPoppy account. `pnpm agent:setting sync` pulls:
 
 - chameleon name
 - appearance/skin
@@ -12,7 +12,7 @@ from:
 
 ```http
 GET /api/runtime/profile
-X-Agent-Jola-Key: <product-api-key>
+X-Agent-Poppy-Key: <product-api-key>
 ```
 
 The local runtime writes or updates the local profile Agent. It should never receive provider API keys from the hosted portal.
@@ -40,13 +40,13 @@ Confirm before these browser/API actions because they alter room state:
 
 ## Provider Bridge
 
-Agent Jola supports:
+AgentPoppy supports:
 
 - local self-check Agent, command name `pnpm agent:mock`: no model tokens
 - OpenAI Responses API local adapter
 - Anthropic Messages API local adapter
 
-Provider keys stay local. The bridge fetches provider-shaped prompts from Agent Jola and submits only the selected game action back. Do not upload provider keys, environment dumps, local file paths, or full private logs to the hosted service.
+Provider keys stay local. The bridge fetches provider-shaped prompts from AgentPoppy and submits only the selected game action back. Do not upload provider keys, environment dumps, local file paths, or full private logs to the hosted service.
 
 Use the local connection self-check before spending provider tokens:
 

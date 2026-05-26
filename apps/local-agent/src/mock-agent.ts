@@ -1,4 +1,4 @@
-import { getStrategyPromptTemplate } from "@agent-bomber/strategy";
+import { getStrategyPromptTemplate } from "@agent-poppy/strategy";
 import {
   maxPollsFromEnv,
   openAIWaitResponse,

@@ -1,5 +1,5 @@
 {
-  "name": "@agent-bomber/strategy",
+  "name": "@agent-poppy/strategy",
   "version": "0.1.0",
   "type": "module",
   "main": "dist/index.js",

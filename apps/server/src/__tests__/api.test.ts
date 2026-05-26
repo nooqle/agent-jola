@@ -8,10 +8,10 @@ import { Storage } from "../storage.js";
 
 let tempDir: string;
 let storage: Storage;
-const productApiHeaders = { "x-agent-jola-key": "agent-jola-local-dev-key" };
+const productApiHeaders = { "x-agent-poppy-key": "agent-poppy-local-dev-key" };
 
 beforeEach(async () => {
-  tempDir = await mkdtemp(join(tmpdir(), "agent-bomber-server-"));
+  tempDir = await mkdtemp(join(tmpdir(), "agent-poppy-server-"));
   storage = new Storage(tempDir);
   await storage.init();
 });
@@ -27,9 +27,9 @@ describe("server API", () => {
     await mkdir(join(webDistDir, "assets"), { recursive: true });
     await writeFile(
       join(webDistDir, "index.html"),
-      '<!doctype html><div id="root">Agent Jola Web</div><script src="/assets/app.js"></script>'
+      '<!doctype html><div id="root">AgentPoppy Web</div><script src="/assets/app.js"></script>'
     );
-    await writeFile(join(webDistDir, "assets", "app.js"), "console.log('agent-jola');");
+    await writeFile(join(webDistDir, "assets", "app.js"), "console.log('agent-poppy');");
 
     const runtime = new MatchRuntimeManager(storage, 1000);
     const app = await buildApp({ storage, runtime, webDistDir });
@@ -38,16 +38,16 @@ describe("server API", () => {
       const home = await app.inject({ method: "GET", url: "/" });
       expect(home.statusCode).toBe(200);
       expect(home.headers["content-type"]).toContain("text/html");
-      expect(home.body).toContain("Agent Jola Web");
+      expect(home.body).toContain("AgentPoppy Web");
 
       const asset = await app.inject({ method: "GET", url: "/assets/app.js" });
       expect(asset.statusCode).toBe(200);
       expect(asset.headers["content-type"]).toContain("text/javascript");
-      expect(asset.body).toContain("agent-jola");
+      expect(asset.body).toContain("agent-poppy");
 
       const spaRoute = await app.inject({ method: "GET", url: "/battle/match_123" });
       expect(spaRoute.statusCode).toBe(200);
-      expect(spaRoute.body).toContain("Agent Jola Web");
+      expect(spaRoute.body).toContain("AgentPoppy Web");
 
       const missingApi = await app.inject({ method: "GET", url: "/api/not-found" });
       expect(missingApi.statusCode).toBe(404);
@@ -289,7 +289,7 @@ describe("server API", () => {
     }
   });
 
-  it("keeps legacy Agent Poppy product API headers working for one compatibility version", async () => {
+  it("reports AgentPoppy product API auth metadata", async () => {
     const runtime = new MatchRuntimeManager(storage, 1000);
     const app = await buildApp({ storage, runtime });
 
@@ -303,8 +303,7 @@ describe("server API", () => {
       expect(me.json()).toMatchObject({
         user: { id: "local-user", mode: "local-dev" },
         auth: {
-          header: "X-Agent-Jola-Key",
-          legacyHeaders: ["X-Agent-Poppy-Key"]
+          header: "X-Agent-Poppy-Key"
         }
       });
     } finally {
@@ -444,10 +443,10 @@ describe("server API", () => {
   });
 
   it("issues signed product API keys with scoped access", async () => {
-    const previousAdminKey = process.env.AGENT_JOLA_ADMIN_KEY;
-    const previousIssuerSecret = process.env.AGENT_JOLA_KEY_ISSUER_SECRET;
-    process.env.AGENT_JOLA_ADMIN_KEY = "admin-test-key";
-    process.env.AGENT_JOLA_KEY_ISSUER_SECRET = "issuer-test-secret";
+    const previousAdminKey = process.env.AGENT_POPPY_ADMIN_KEY;
+    const previousIssuerSecret = process.env.AGENT_POPPY_KEY_ISSUER_SECRET;
+    process.env.AGENT_POPPY_ADMIN_KEY = "admin-test-key";
+    process.env.AGENT_POPPY_KEY_ISSUER_SECRET = "issuer-test-secret";
     const runtime = new MatchRuntimeManager(storage, 1000);
     const app = await buildApp({ storage, runtime });
 
@@ -462,7 +461,7 @@ describe("server API", () => {
       const issued = await app.inject({
         method: "POST",
         url: "/api/admin/product-keys",
-        headers: { "x-agent-jola-admin-key": "admin-test-key" },
+        headers: { "x-agent-poppy-admin-key": "admin-test-key" },
         payload: {
           handle: "OpenClaw Local",
           scopes: ["profile:read", "templates:read"],
@@ -485,7 +484,7 @@ describe("server API", () => {
       const me = await app.inject({
         method: "GET",
         url: "/api/me",
-        headers: { "x-agent-jola-key": body.key }
+        headers: { "x-agent-poppy-key": body.key }
       });
       expect(me.statusCode).toBe(200);
       expect(me.json().user).toMatchObject({
@@ -497,14 +496,14 @@ describe("server API", () => {
       const templates = await app.inject({
         method: "GET",
         url: "/api/strategy-templates",
-        headers: { "x-agent-jola-key": body.key }
+        headers: { "x-agent-poppy-key": body.key }
       });
       expect(templates.statusCode).toBe(200);
 
       const createRoom = await app.inject({
         method: "POST",
         url: "/api/rooms",
-        headers: { "x-agent-jola-key": body.key },
+        headers: { "x-agent-poppy-key": body.key },
         payload: { mapId: "royale" }
       });
       expect(createRoom.statusCode).toBe(403);
@@ -513,7 +512,7 @@ describe("server API", () => {
       const listed = await app.inject({
         method: "GET",
         url: "/api/admin/product-keys",
-        headers: { "x-agent-jola-admin-key": "admin-test-key" }
+        headers: { "x-agent-poppy-admin-key": "admin-test-key" }
       });
       expect(listed.statusCode).toBe(200);
       expect(listed.json().keys).toEqual(
@@ -529,7 +528,7 @@ describe("server API", () => {
       const revoked = await app.inject({
         method: "POST",
         url: `/api/admin/product-keys/${body.id}/revoke`,
-        headers: { "x-agent-jola-admin-key": "admin-test-key" }
+        headers: { "x-agent-poppy-admin-key": "admin-test-key" }
       });
       expect(revoked.statusCode).toBe(200);
       expect(revoked.json()).toMatchObject({ id: body.id, revokedAt: expect.any(String) });
@@ -537,29 +536,29 @@ describe("server API", () => {
       const revokedMe = await app.inject({
         method: "GET",
         url: "/api/me",
-        headers: { "x-agent-jola-key": body.key }
+        headers: { "x-agent-poppy-key": body.key }
       });
       expect(revokedMe.statusCode).toBe(401);
     } finally {
       await app.close();
       if (previousAdminKey === undefined) {
-        delete process.env.AGENT_JOLA_ADMIN_KEY;
+        delete process.env.AGENT_POPPY_ADMIN_KEY;
       } else {
-        process.env.AGENT_JOLA_ADMIN_KEY = previousAdminKey;
+        process.env.AGENT_POPPY_ADMIN_KEY = previousAdminKey;
       }
       if (previousIssuerSecret === undefined) {
-        delete process.env.AGENT_JOLA_KEY_ISSUER_SECRET;
+        delete process.env.AGENT_POPPY_KEY_ISSUER_SECRET;
       } else {
-        process.env.AGENT_JOLA_KEY_ISSUER_SECRET = previousIssuerSecret;
+        process.env.AGENT_POPPY_KEY_ISSUER_SECRET = previousIssuerSecret;
       }
     }
   });
 
   it("supports hosted portal profile, install command, and runtime profile sync", async () => {
-    const previousIssuerSecret = process.env.AGENT_JOLA_KEY_ISSUER_SECRET;
-    const previousPublicBaseUrl = process.env.AGENT_JOLA_PUBLIC_API_BASE_URL;
-    process.env.AGENT_JOLA_KEY_ISSUER_SECRET = "portal-issuer-test-secret";
-    process.env.AGENT_JOLA_PUBLIC_API_BASE_URL = "https://api.agentjola.test";
+    const previousIssuerSecret = process.env.AGENT_POPPY_KEY_ISSUER_SECRET;
+    const previousPublicBaseUrl = process.env.AGENT_POPPY_PUBLIC_API_BASE_URL;
+    process.env.AGENT_POPPY_KEY_ISSUER_SECRET = "portal-issuer-test-secret";
+    process.env.AGENT_POPPY_PUBLIC_API_BASE_URL = "https://api.agentpoppy.test";
     const runtime = new MatchRuntimeManager(storage, 1000);
     const app = await buildApp({ storage, runtime });
 
@@ -577,7 +576,7 @@ describe("server API", () => {
       });
       expect(login.headers["set-cookie"]).toContain("HttpOnly");
       expect(login.headers["set-cookie"]).toContain("SameSite=Lax");
-      const portalHeaders = { "x-agent-jola-portal-token": session.portalToken };
+      const portalHeaders = { "x-agent-poppy-portal-token": session.portalToken };
 
       const cookieMe = await app.inject({
         method: "GET",
@@ -627,24 +626,24 @@ describe("server API", () => {
       expect(keyBody.key).toMatch(/^ap_issued_/);
       expect(keyBody.install).toMatchObject({
         baseUrl: "http://127.0.0.1:3001",
-        cloudUrl: "https://api.agentjola.test",
+        cloudUrl: "https://api.agentpoppy.test",
         provider: "openai",
         commands: {
-          clone: "git clone https://github.com/nooqle/agent-jola.git",
-          configure: expect.stringContaining("--cloud-url https://api.agentjola.test"),
+          clone: "git clone https://github.com/nooqle/AgentPoppy.git",
+          configure: expect.stringContaining("--cloud-url https://api.agentpoppy.test"),
           syncProfile: "pnpm agent:setting sync",
           runAgent: "pnpm agent:openai"
         },
         env: {
-          AGENT_JOLA_CLOUD_BASE_URL: "https://api.agentjola.test",
-          AGENT_JOLA_API_KEY: keyBody.key
+          AGENT_POPPY_CLOUD_BASE_URL: "https://api.agentpoppy.test",
+          AGENT_POPPY_API_KEY: keyBody.key
         }
       });
 
       const runtimeProfile = await app.inject({
         method: "GET",
         url: "/api/runtime/profile",
-        headers: { "x-agent-jola-key": keyBody.key }
+        headers: { "x-agent-poppy-key": keyBody.key }
       });
       expect(runtimeProfile.statusCode).toBe(200);
       expect(runtimeProfile.json()).toMatchObject({
@@ -676,7 +675,7 @@ describe("server API", () => {
       expect(installAgain.json()).toMatchObject({
         provider: "anthropic",
         commands: { runAgent: "pnpm agent:anthropic" },
-        env: { AGENT_JOLA_API_KEY: "<paste API key shown when it was created>" }
+        env: { AGENT_POPPY_API_KEY: "<paste API key shown when it was created>" }
       });
 
       const revoked = await app.inject({
@@ -690,20 +689,20 @@ describe("server API", () => {
       const rejectedRuntimeProfile = await app.inject({
         method: "GET",
         url: "/api/runtime/profile",
-        headers: { "x-agent-jola-key": keyBody.key }
+        headers: { "x-agent-poppy-key": keyBody.key }
       });
       expect(rejectedRuntimeProfile.statusCode).toBe(401);
     } finally {
       await app.close();
       if (previousIssuerSecret === undefined) {
-        delete process.env.AGENT_JOLA_KEY_ISSUER_SECRET;
+        delete process.env.AGENT_POPPY_KEY_ISSUER_SECRET;
       } else {
-        process.env.AGENT_JOLA_KEY_ISSUER_SECRET = previousIssuerSecret;
+        process.env.AGENT_POPPY_KEY_ISSUER_SECRET = previousIssuerSecret;
       }
       if (previousPublicBaseUrl === undefined) {
-        delete process.env.AGENT_JOLA_PUBLIC_API_BASE_URL;
+        delete process.env.AGENT_POPPY_PUBLIC_API_BASE_URL;
       } else {
-        process.env.AGENT_JOLA_PUBLIC_API_BASE_URL = previousPublicBaseUrl;
+        process.env.AGENT_POPPY_PUBLIC_API_BASE_URL = previousPublicBaseUrl;
       }
     }
   });
@@ -753,19 +752,19 @@ describe("server API", () => {
     }
   });
 
-  it("builds production Google OAuth redirects and secure cookies for agentjola.art", async () => {
+  it("builds production Google OAuth redirects and secure cookies for AgentPoppy", async () => {
     const previousNodeEnv = process.env.NODE_ENV;
-    const previousClientId = process.env.AGENT_JOLA_GOOGLE_CLIENT_ID;
-    const previousClientSecret = process.env.AGENT_JOLA_GOOGLE_CLIENT_SECRET;
-    const previousRedirect = process.env.AGENT_JOLA_GOOGLE_REDIRECT_URI;
-    const previousPublicBaseUrl = process.env.AGENT_JOLA_PUBLIC_API_BASE_URL;
-    const previousDevLogin = process.env.AGENT_JOLA_ENABLE_DEV_PORTAL_LOGIN;
+    const previousClientId = process.env.AGENT_POPPY_GOOGLE_CLIENT_ID;
+    const previousClientSecret = process.env.AGENT_POPPY_GOOGLE_CLIENT_SECRET;
+    const previousRedirect = process.env.AGENT_POPPY_GOOGLE_REDIRECT_URI;
+    const previousPublicBaseUrl = process.env.AGENT_POPPY_PUBLIC_API_BASE_URL;
+    const previousDevLogin = process.env.AGENT_POPPY_ENABLE_DEV_PORTAL_LOGIN;
     process.env.NODE_ENV = "production";
-    process.env.AGENT_JOLA_GOOGLE_CLIENT_ID = "google-client-id";
-    process.env.AGENT_JOLA_GOOGLE_CLIENT_SECRET = "google-client-secret";
-    process.env.AGENT_JOLA_GOOGLE_REDIRECT_URI = "https://agentjola.art/api/auth/google/callback";
-    process.env.AGENT_JOLA_PUBLIC_API_BASE_URL = "https://agentjola.art";
-    process.env.AGENT_JOLA_ENABLE_DEV_PORTAL_LOGIN = "true";
+    process.env.AGENT_POPPY_GOOGLE_CLIENT_ID = "google-client-id";
+    process.env.AGENT_POPPY_GOOGLE_CLIENT_SECRET = "google-client-secret";
+    process.env.AGENT_POPPY_GOOGLE_REDIRECT_URI = "https://agentpoppy.test/api/auth/google/callback";
+    process.env.AGENT_POPPY_PUBLIC_API_BASE_URL = "https://agentpoppy.test";
+    process.env.AGENT_POPPY_ENABLE_DEV_PORTAL_LOGIN = "true";
     const runtime = new MatchRuntimeManager(storage, 1000);
     const app = await buildApp({ storage, runtime });
 
@@ -778,7 +777,7 @@ describe("server API", () => {
       const location = String(googleStart.headers.location);
       expect(location).toContain("https://accounts.google.com/o/oauth2/v2/auth");
       expect(location).toContain(
-        encodeURIComponent("https://agentjola.art/api/auth/google/callback")
+        encodeURIComponent("https://agentpoppy.test/api/auth/google/callback")
       );
       expect(location).toContain("state=st_");
 
@@ -799,38 +798,38 @@ describe("server API", () => {
         process.env.NODE_ENV = previousNodeEnv;
       }
       if (previousClientId === undefined) {
-        delete process.env.AGENT_JOLA_GOOGLE_CLIENT_ID;
+        delete process.env.AGENT_POPPY_GOOGLE_CLIENT_ID;
       } else {
-        process.env.AGENT_JOLA_GOOGLE_CLIENT_ID = previousClientId;
+        process.env.AGENT_POPPY_GOOGLE_CLIENT_ID = previousClientId;
       }
       if (previousClientSecret === undefined) {
-        delete process.env.AGENT_JOLA_GOOGLE_CLIENT_SECRET;
+        delete process.env.AGENT_POPPY_GOOGLE_CLIENT_SECRET;
       } else {
-        process.env.AGENT_JOLA_GOOGLE_CLIENT_SECRET = previousClientSecret;
+        process.env.AGENT_POPPY_GOOGLE_CLIENT_SECRET = previousClientSecret;
       }
       if (previousRedirect === undefined) {
-        delete process.env.AGENT_JOLA_GOOGLE_REDIRECT_URI;
+        delete process.env.AGENT_POPPY_GOOGLE_REDIRECT_URI;
       } else {
-        process.env.AGENT_JOLA_GOOGLE_REDIRECT_URI = previousRedirect;
+        process.env.AGENT_POPPY_GOOGLE_REDIRECT_URI = previousRedirect;
       }
       if (previousPublicBaseUrl === undefined) {
-        delete process.env.AGENT_JOLA_PUBLIC_API_BASE_URL;
+        delete process.env.AGENT_POPPY_PUBLIC_API_BASE_URL;
       } else {
-        process.env.AGENT_JOLA_PUBLIC_API_BASE_URL = previousPublicBaseUrl;
+        process.env.AGENT_POPPY_PUBLIC_API_BASE_URL = previousPublicBaseUrl;
       }
       if (previousDevLogin === undefined) {
-        delete process.env.AGENT_JOLA_ENABLE_DEV_PORTAL_LOGIN;
+        delete process.env.AGENT_POPPY_ENABLE_DEV_PORTAL_LOGIN;
       } else {
-        process.env.AGENT_JOLA_ENABLE_DEV_PORTAL_LOGIN = previousDevLogin;
+        process.env.AGENT_POPPY_ENABLE_DEV_PORTAL_LOGIN = previousDevLogin;
       }
     }
   });
 
   it("does not expose dev-login in production unless explicitly enabled", async () => {
     const previousNodeEnv = process.env.NODE_ENV;
-    const previousDevLogin = process.env.AGENT_JOLA_ENABLE_DEV_PORTAL_LOGIN;
+    const previousDevLogin = process.env.AGENT_POPPY_ENABLE_DEV_PORTAL_LOGIN;
     process.env.NODE_ENV = "production";
-    delete process.env.AGENT_JOLA_ENABLE_DEV_PORTAL_LOGIN;
+    delete process.env.AGENT_POPPY_ENABLE_DEV_PORTAL_LOGIN;
     const runtime = new MatchRuntimeManager(storage, 1000);
     const app = await buildApp({ storage, runtime });
 
@@ -850,9 +849,9 @@ describe("server API", () => {
         process.env.NODE_ENV = previousNodeEnv;
       }
       if (previousDevLogin === undefined) {
-        delete process.env.AGENT_JOLA_ENABLE_DEV_PORTAL_LOGIN;
+        delete process.env.AGENT_POPPY_ENABLE_DEV_PORTAL_LOGIN;
       } else {
-        process.env.AGENT_JOLA_ENABLE_DEV_PORTAL_LOGIN = previousDevLogin;
+        process.env.AGENT_POPPY_ENABLE_DEV_PORTAL_LOGIN = previousDevLogin;
       }
     }
   });

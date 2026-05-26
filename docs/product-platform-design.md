@@ -1,28 +1,27 @@
-# Agent Jola Product Platform Design
+# AgentPoppy Product Platform Design
 
-本文档把当前讨论收束为一个统一设计：Agent Jola 既是可开源安装的本地 Agent 对战项目，也是由官方站点提供账号、形象、API key、配额和安装指令的产品平台。
+本文档把当前讨论收束为一个统一设计：AgentPoppy 既是可开源安装的本地 Agent 对战项目，也是由官方站点提供账号、形象、API key、配额和安装指令的产品平台。
 
 ## 0. 命名边界
 
-对外产品名暂定为 **Agent Jola**，域名和官网品牌应围绕 AgentJola 统一。
+对外产品名暂定为 **AgentPoppy**，域名和官网品牌应围绕 AgentPoppy 统一。
 
-对外 API、安装命令和官网 UI 使用 `Agent Jola`、`AGENT_JOLA_*`、`X-Agent-Jola-*` 和 `agent-jola`。当前实现仍兼容 `AGENT_POPPY_*`、`X-Agent-Poppy-*` 和 `agent-poppy-*`，仅作为一个版本内的 legacy alias，避免早期本地 Alpha 链路断开。
+对外 API、安装命令和官网 UI 使用 `AgentPoppy`、`AGENT_POPPY_*`、`X-Agent-Poppy-*` 和 `agent-poppy`。
 
 迁移原则：
 
-- 对外 UI、官网、README 主叙事、设计文档使用 `Agent Jola`。
-- 代码包名如果仍带内部历史命名，只有在影响用户可见安装路径时才迁移。
-- 旧变量名和旧 header 只能作为兼容 alias 存在，不能出现在官网主流程、README 主叙事和安装命令里。
+- 对外 UI、官网、README 主叙事、设计文档使用 `AgentPoppy`。
+- 代码包名、文档路径和 skill 路径也统一迁移到 AgentPoppy，避免 GitHub 页面和安装说明出现多套名称。
 
 ## 1. 核心判断
 
-Agent Jola 不应该只做成“官网里的网页游戏”。更强的形态是：
+AgentPoppy 不应该只做成“官网里的网页游戏”。更强的形态是：
 
 - 官网负责用户身份、变色龙形象、策略模板、API key、额度和商业化。
 - 开源项目负责本地安装、房间运行、战斗模拟、Agent 接入和观战界面。
 - 用户拿到 API key 后，可以让 Codex、Claude Code、OpenClaw、自写脚本或其他本地 Agent 连接自己的本地运行时。
 - 好友也需要自己的账号和 key。每个人可以创建房间或加入别人房间。
-- 其他人可以 fork/self-host，但官方体验默认走 Agent Jola 官网发放 key 和 profile。
+- 其他人可以 fork/self-host，但官方体验默认走 AgentPoppy 官网发放 key 和 profile。
 
 这个形态比“完全云端多人在线游戏”更低服务器成本，也更贴合 Agent 本地端生态。
 
@@ -135,7 +134,7 @@ Server 的职责：
 
 ```mermaid
 flowchart LR
-  User["User"] --> WebSite["Agent Jola Website"]
+  User["User"] --> WebSite["AgentPoppy Website"]
   WebSite --> Auth["Google OAuth / Portal Session"]
   WebSite --> Profile["Hosted Profile Service"]
   WebSite --> KeyIssuer["API Key Issuer"]
@@ -239,7 +238,7 @@ GET  /api/portal/install-command/:keyId
 
 ```http
 GET /api/runtime/profile
-X-Agent-Jola-Key: ap_issued_xxx
+X-Agent-Poppy-Key: ap_issued_xxx
 ```
 
 返回：
@@ -370,13 +369,13 @@ data/decisions/{matchId}.jsonl
 官网创建 key 后，应该展示类似：
 
 ```powershell
-git clone https://github.com/agent-jola/agent-jola.git
-cd agent-jola
+git clone https://github.com/nooqle/AgentPoppy.git
+cd AgentPoppy
 pnpm install
 
 pnpm agent:setting write --yes `
   --base-url http://127.0.0.1:3001 `
-  --cloud-url https://agentjola.art `
+  --cloud-url https://agentpoppy.example.com `
   --api-key ap_issued_xxx `
   --provider mock
 
@@ -389,7 +388,7 @@ OpenAI：
 
 ```powershell
 pnpm agent:setting write --yes `
-  --cloud-url https://agentjola.art `
+  --cloud-url https://agentpoppy.example.com `
   --api-key ap_issued_xxx `
   --provider openai `
   --model gpt-4.1 `
@@ -403,7 +402,7 @@ Anthropic：
 
 ```powershell
 pnpm agent:setting write --yes `
-  --cloud-url https://agentjola.art `
+  --cloud-url https://agentpoppy.example.com `
   --api-key ap_issued_xxx `
   --provider anthropic `
   --model claude-sonnet-4-20250514 `

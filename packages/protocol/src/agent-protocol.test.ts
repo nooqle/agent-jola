@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { applyTick, createInitialMatchState } from "@agent-bomber/core";
+import { applyTick, createInitialMatchState } from "@agent-poppy/core";
 import {
   AGENT_ACTION_TOOL_NAME,
   AGENT_PROTOCOL_VERSION,

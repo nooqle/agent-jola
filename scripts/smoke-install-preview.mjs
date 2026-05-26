@@ -6,11 +6,11 @@ import { createServer } from "node:net";
 import { fileURLToPath } from "node:url";
 
 const rootDir = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const tempRoot = join(tmpdir(), `agent-jola-install-smoke-${Date.now()}`);
-const installedRoot = join(tempRoot, "agent-jola");
+const tempRoot = join(tmpdir(), `agent-poppy-install-smoke-${Date.now()}`);
+const installedRoot = join(tempRoot, "agent-poppy");
 const dataDir = join(tempRoot, "data");
 const pnpm = process.platform === "win32" ? "pnpm.cmd" : "pnpm";
-const apiKeyIssuerSecret = "agent-jola-install-smoke-issuer-secret";
+const apiKeyIssuerSecret = "agent-poppy-install-smoke-issuer-secret";
 
 await rm(tempRoot, { recursive: true, force: true });
 await mkdir(tempRoot, { recursive: true });
@@ -20,7 +20,7 @@ try {
   await installDependencies(installedRoot);
   await run(pnpm, ["build"], { cwd: installedRoot });
 
-  const port = await freePort(Number(process.env.AGENT_JOLA_INSTALL_SMOKE_PORT ?? 3021));
+  const port = await freePort(Number(process.env.AGENT_POPPY_INSTALL_SMOKE_PORT ?? 3021));
   const baseUrl = `http://127.0.0.1:${port}`;
   const serverEntry = join(installedRoot, "apps/server/dist/index.js");
   const server = spawn(process.execPath, [serverEntry], {
@@ -29,12 +29,12 @@ try {
       ...process.env,
       HOST: "127.0.0.1",
       PORT: String(port),
-      AGENT_BOMBER_DATA_DIR: dataDir,
-      AGENT_JOLA_WEB_DIST: "apps/web/dist",
-      AGENT_JOLA_KEY_ISSUER_SECRET: apiKeyIssuerSecret,
-      AGENT_JOLA_ENABLE_DEV_PORTAL_LOGIN: "true",
-      AGENT_JOLA_PUBLIC_API_BASE_URL: baseUrl,
-      AGENT_JOLA_CORS_ORIGINS: baseUrl
+      AGENT_POPPY_DATA_DIR: dataDir,
+      AGENT_POPPY_WEB_DIST: "apps/web/dist",
+      AGENT_POPPY_KEY_ISSUER_SECRET: apiKeyIssuerSecret,
+      AGENT_POPPY_ENABLE_DEV_PORTAL_LOGIN: "true",
+      AGENT_POPPY_PUBLIC_API_BASE_URL: baseUrl,
+      AGENT_POPPY_CORS_ORIGINS: baseUrl
     },
     stdio: ["ignore", "pipe", "pipe"]
   });
@@ -49,7 +49,7 @@ try {
       }
     });
     assert(typeof portal.portalToken === "string", "dev portal login did not return a portal token");
-    const portalHeaders = { "x-agent-jola-portal-token": portal.portalToken };
+    const portalHeaders = { "x-agent-poppy-portal-token": portal.portalToken };
 
     await putJson(`${baseUrl}/api/portal/profile`, {
       headers: portalHeaders,
@@ -92,12 +92,12 @@ try {
     await run(pnpm, ["agent:setting", "sync"], { cwd: installedRoot, redact: [issued.key] });
     await run(pnpm, ["agent:setting", "check"], { cwd: installedRoot, redact: [issued.key] });
 
-    const me = await getJson(`${baseUrl}/api/me`, { headers: { "x-agent-jola-key": issued.key } });
+    const me = await getJson(`${baseUrl}/api/me`, { headers: { "x-agent-poppy-key": issued.key } });
     assert(me.user?.handle === issued.user?.handle, "issued key could not authenticate local runtime");
-    const profile = await getJson(`${baseUrl}/api/profile`, { headers: { "x-agent-jola-key": issued.key } });
+    const profile = await getJson(`${baseUrl}/api/profile`, { headers: { "x-agent-poppy-key": issued.key } });
     assert(profile.agent?.name === "InstallSmoke", "synced local Agent was not created");
     const room = await postJson(`${baseUrl}/api/rooms`, {
-      headers: { "x-agent-jola-key": issued.key },
+      headers: { "x-agent-poppy-key": issued.key },
       body: { hostAgentId: profile.agent.id, mapId: "royale" }
     });
     assert(typeof room.inviteCode === "string" && room.inviteCode.startsWith("AP-"), "room invite code missing");
@@ -132,7 +132,7 @@ async function copyInstallSource(source, target) {
         name.endsWith(".pid") ||
         name.startsWith(".tmp") ||
         name.startsWith("server-runtime.") ||
-        name.startsWith("agent-jola-portal-redesign")
+        name.startsWith("agent-poppy-portal-redesign")
       ) {
         return false;
       }

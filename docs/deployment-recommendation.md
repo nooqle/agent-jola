@@ -1,10 +1,10 @@
-# Agent Jola Deployment Recommendation
+# AgentPoppy Deployment Recommendation
 
 Last reviewed: 2026-05-22
 
 ## Short Answer
 
-Google Cloud is enough for Agent Jola, but the first hosted preview should not start with the full Cloud Run plus Cloud SQL plus Redis architecture unless we are ready to migrate storage away from local SQLite.
+Google Cloud is enough for AgentPoppy, but the first hosted preview should not start with the full Cloud Run plus Cloud SQL plus Redis architecture unless we are ready to migrate storage away from local SQLite.
 
 Recommended sequence:
 
@@ -14,7 +14,7 @@ Recommended sequence:
 
 ## Why Not Cloud Run First
 
-Cloud Run is attractive because it is managed, supports containers, supports WebSockets, and can scale down. However, Agent Jola currently uses SQLite plus local replay files. Cloud Run container file writes are in-memory and do not persist after the instance stops, so using the current storage layer on Cloud Run would risk losing portal users, API keys, rooms, replay files, and decision logs.
+Cloud Run is attractive because it is managed, supports containers, supports WebSockets, and can scale down. However, AgentPoppy currently uses SQLite plus local replay files. Cloud Run container file writes are in-memory and do not persist after the instance stops, so using the current storage layer on Cloud Run would risk losing portal users, API keys, rooms, replay files, and decision logs.
 
 Cloud Run can support WebSockets, but a WebSocket connection keeps an instance active and billed. Multi-instance WebSockets also need external state synchronization because reconnects can land on a different instance. That means Cloud Run becomes a good production architecture only after we add a shared database and a shared real-time coordination path.
 
@@ -26,9 +26,9 @@ Use a small Compute Engine VM:
 - Docker Compose from this repo.
 - Persistent disk for `data/`.
 - Nginx or Caddy in front for HTTPS.
-- `agentjola.art` points to the VM.
-- Google OAuth callback: `https://agentjola.art/api/auth/google/callback`.
-- Nightly backup of `data/agent-bomber.sqlite`, `data/replays`, and `data/decisions`.
+- `agentpoppy.example.com` points to the VM.
+- Google OAuth callback: `https://agentpoppy.example.com/api/auth/google/callback`.
+- Nightly backup of `data/agent-poppy.sqlite`, `data/replays`, and `data/decisions`.
 
 This matches the current application design and keeps server cost and engineering complexity low.
 

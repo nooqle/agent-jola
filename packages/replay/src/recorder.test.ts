@@ -2,8 +2,8 @@ import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
-import { createInitialMatchState, type DecisionLogEntry } from "@agent-bomber/core";
-import { createStrategyVersion } from "@agent-bomber/strategy";
+import { createInitialMatchState, type DecisionLogEntry } from "@agent-poppy/core";
+import { createStrategyVersion } from "@agent-poppy/strategy";
 import { ReplayRecorder, readDecisionLogFile, readReplayFile, writeDecisionLogFile, writeReplayFile } from "./index.js";
 
 let tempDir: string | undefined;
@@ -17,7 +17,7 @@ afterEach(async () => {
 
 describe("replay recorder", () => {
   it("serializes replay frames and JSONL decision entries", async () => {
-    tempDir = await mkdtemp(join(tmpdir(), "agent-bomber-replay-"));
+    tempDir = await mkdtemp(join(tmpdir(), "agent-poppy-replay-"));
     const state = createInitialMatchState({
       matchId: "match-1",
       seed: "seed-1",

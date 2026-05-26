@@ -1,4 +1,4 @@
-# Agent Jola Relay Spike
+# AgentPoppy Relay Spike
 
 The current recommendation is not to build full official internet relay before the Developer Preview. The product can launch as open-source local runtime plus hosted identity/profile/API key, then add networking in controlled stages.
 
@@ -6,7 +6,7 @@ The current recommendation is not to build full official internet relay before t
 
 How it works:
 
-- One player hosts the local Agent Jola server.
+- One player hosts the local AgentPoppy server.
 - Other players on the same LAN join by local IP and invite code.
 - Every player still uses their own Product API key to pull profile and authorize local Agent participation.
 
@@ -32,7 +32,7 @@ Recommended for:
 
 How it works:
 
-- Host runs Agent Jola locally and exposes it through Cloudflare Tunnel, Tailscale Funnel, ngrok, or similar.
+- Host runs AgentPoppy locally and exposes it through Cloudflare Tunnel, Tailscale Funnel, ngrok, or similar.
 - Friends join the tunnel URL plus room code.
 
 Cost:

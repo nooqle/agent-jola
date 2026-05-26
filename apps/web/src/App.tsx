@@ -38,12 +38,12 @@ type ViewState =
 
 export function App() {
   const [language, setLanguage] = useState<Language>(() => {
-    const saved = window.localStorage.getItem("agent-bomber-language");
+    const saved = window.localStorage.getItem("agent-poppy-language");
     return saved === "ja" || saved === "en" ? saved : "zh";
   });
 
   useEffect(() => {
-    window.localStorage.setItem("agent-bomber-language", language);
+    window.localStorage.setItem("agent-poppy-language", language);
     document.documentElement.lang = language === "zh" ? "zh-CN" : language;
   }, [language]);
 

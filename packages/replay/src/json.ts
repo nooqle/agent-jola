@@ -1,6 +1,6 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname } from "node:path";
-import type { DecisionLogEntry } from "@agent-bomber/core";
+import type { DecisionLogEntry } from "@agent-poppy/core";
 import type { ReplayFile } from "./types.js";
 
 export function serializeReplay(replay: ReplayFile): string {

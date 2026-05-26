@@ -1,4 +1,4 @@
-import { createPlannerContext, planAgentAction } from "@agent-bomber/agent";
+import { createPlannerContext, planAgentAction } from "@agent-poppy/agent";
 import { pathToFileURL } from "node:url";
 import {
   applyTick,
@@ -12,8 +12,8 @@ import {
   type GameEvent,
   type MapPresetId,
   type MatchState,
-} from "@agent-bomber/core";
-import { parseNaturalLanguageStrategy, type AgentStrategy } from "@agent-bomber/strategy";
+} from "@agent-poppy/core";
+import { parseNaturalLanguageStrategy, type AgentStrategy } from "@agent-poppy/strategy";
 
 export interface CliOptions {
   seed: string;

@@ -1,5 +1,5 @@
 import { nanoid } from "nanoid";
-import { createPlannerContext, planAgentAction } from "@agent-bomber/agent";
+import { createPlannerContext, planAgentAction } from "@agent-poppy/agent";
 import {
   ENGINE_VERSION,
   RULES_VERSION,
@@ -11,9 +11,9 @@ import {
   type MatchRecord,
   type MatchState,
   type PlayerState,
-} from "@agent-bomber/core";
-import { ReplayRecorder, writeDecisionLogFile, writeReplayFile, type ReplayFile } from "@agent-bomber/replay";
-import type { AgentProfile, AgentStrategyVersion } from "@agent-bomber/strategy";
+} from "@agent-poppy/core";
+import { ReplayRecorder, writeDecisionLogFile, writeReplayFile, type ReplayFile } from "@agent-poppy/replay";
+import type { AgentProfile, AgentStrategyVersion } from "@agent-poppy/strategy";
 import {
   AGENT_PROTOCOL_VERSION,
   createAgentObservation,
@@ -25,7 +25,7 @@ import {
   type MatchWebSocketMessage,
   type SubmitLocalAgentActionRequest,
   type SubmitLocalAgentActionResponse,
-} from "@agent-bomber/protocol";
+} from "@agent-poppy/protocol";
 import { Storage } from "./storage.js";
 import { HttpError } from "./errors.js";
 

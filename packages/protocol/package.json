@@ -1,5 +1,5 @@
 {
-  "name": "@agent-bomber/protocol",
+  "name": "@agent-poppy/protocol",
   "version": "0.1.0",
   "type": "module",
   "main": "dist/index.js",
@@ -8,8 +8,8 @@
     "build": "tsc -p tsconfig.json"
   },
   "dependencies": {
-    "@agent-bomber/core": "workspace:*",
-    "@agent-bomber/strategy": "workspace:*",
-    "@agent-bomber/replay": "workspace:*"
+    "@agent-poppy/core": "workspace:*",
+    "@agent-poppy/strategy": "workspace:*",
+    "@agent-poppy/replay": "workspace:*"
   }
 }

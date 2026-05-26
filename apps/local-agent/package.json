@@ -1,5 +1,5 @@
 {
-  "name": "@agent-bomber/local-agent",
+  "name": "@agent-poppy/local-agent",
   "version": "0.1.0",
   "type": "module",
   "private": true,
@@ -21,8 +21,8 @@
     "templates": "tsx src/templates-cli.ts list"
   },
   "dependencies": {
-    "@agent-bomber/protocol": "workspace:*",
-    "@agent-bomber/strategy": "workspace:*"
+    "@agent-poppy/protocol": "workspace:*",
+    "@agent-poppy/strategy": "workspace:*"
   },
   "devDependencies": {
     "tsx": "^4.19.4"

@@ -1,5 +1,5 @@
-import type { DecisionLogEntry, GameEvent, MatchRecord, MatchState, PlayerAppearance } from "@agent-bomber/core";
-import type { AgentStrategyVersion } from "@agent-bomber/strategy";
+import type { DecisionLogEntry, GameEvent, MatchRecord, MatchState, PlayerAppearance } from "@agent-poppy/core";
+import type { AgentStrategyVersion } from "@agent-poppy/strategy";
 
 export interface ReplayFrame {
   tick: number;

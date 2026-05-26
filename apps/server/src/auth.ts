@@ -9,15 +9,12 @@ import type {
   ProductApiQuotaPolicy,
   ProductApiScope,
   ProductApiUser
-} from "@agent-bomber/protocol";
+} from "@agent-poppy/protocol";
 import { HttpError } from "./errors.js";
 
-export const PRODUCT_API_KEY_HEADER = "x-agent-jola-key";
-export const LEGACY_PRODUCT_API_KEY_HEADER = "x-agent-poppy-key";
-export const PRODUCT_API_ADMIN_KEY_HEADER = "x-agent-jola-admin-key";
-export const LEGACY_PRODUCT_API_ADMIN_KEY_HEADER = "x-agent-poppy-admin-key";
-export const DEFAULT_LOCAL_PRODUCT_API_KEY = "agent-jola-local-dev-key";
-export const LEGACY_DEFAULT_LOCAL_PRODUCT_API_KEY = "agent-poppy-local-dev-key";
+export const PRODUCT_API_KEY_HEADER = "x-agent-poppy-key";
+export const PRODUCT_API_ADMIN_KEY_HEADER = "x-agent-poppy-admin-key";
+export const DEFAULT_LOCAL_PRODUCT_API_KEY = "agent-poppy-local-dev-key";
 const ISSUED_PRODUCT_API_KEY_PREFIX = "ap_issued_";
 type ProductApiKeyStatusLookup = (keyId: string) => ProductApiKeyStatus;
 let productApiKeyStatusLookup: ProductApiKeyStatusLookup | undefined;
@@ -67,16 +64,15 @@ export function productApiUser(
 }
 
 export function productApiAuthInfo(): ProductApiAuthInfo {
-  const source = envValue("AGENT_JOLA_API_KEY", "AGENT_POPPY_API_KEY")
+  const source = envValue("AGENT_POPPY_API_KEY")
     ? "env"
-    : envValue("AGENT_JOLA_KEY_ISSUER_SECRET", "AGENT_POPPY_KEY_ISSUER_SECRET")
+    : envValue("AGENT_POPPY_KEY_ISSUER_SECRET")
       ? "issuer"
       : process.env.NODE_ENV === "production"
         ? "missing"
         : "local-dev-default";
   return {
-    header: "X-Agent-Jola-Key",
-    legacyHeaders: ["X-Agent-Poppy-Key"],
+    header: "X-Agent-Poppy-Key",
     authorization: "Bearer",
     source,
     scopes: source === "missing" ? [] : ALL_PRODUCT_API_SCOPES
@@ -84,7 +80,7 @@ export function productApiAuthInfo(): ProductApiAuthInfo {
 }
 
 export function productApiQuotaPolicies(): ProductApiQuotaPolicy[] {
-  const configured = parseQuotaEnv(envValue("AGENT_JOLA_QUOTAS", "AGENT_POPPY_QUOTAS"));
+  const configured = parseQuotaEnv(envValue("AGENT_POPPY_QUOTAS"));
   return (Object.keys(DEFAULT_PRODUCT_API_QUOTAS) as ProductApiQuotaKey[]).map((key) => {
     const base = DEFAULT_PRODUCT_API_QUOTAS[key];
     const limit = configured[key] ?? base.limit;
@@ -119,10 +115,10 @@ export function requireProductApiKey(request: FastifyRequest): ProductApiUser {
   }
 
   if (!provided) {
-    throw new HttpError(401, "Missing Agent Jola API key.", "PRODUCT_API_KEY_INVALID");
+    throw new HttpError(401, "Missing AgentPoppy API key.", "PRODUCT_API_KEY_INVALID");
   }
   if (!credential) {
-    throw new HttpError(401, "Missing or invalid Agent Jola API key.", "PRODUCT_API_KEY_INVALID");
+    throw new HttpError(401, "Missing or invalid AgentPoppy API key.", "PRODUCT_API_KEY_INVALID");
   }
   return credential.user;
 }
@@ -135,7 +131,7 @@ export function requireProductApiScope(
   if (!user.scopes.includes(scope)) {
     throw new HttpError(
       403,
-      `Agent Jola API key is missing scope: ${scope}`,
+      `AgentPoppy API key is missing scope: ${scope}`,
       "PRODUCT_API_KEY_SCOPE_MISSING"
     );
   }
@@ -143,7 +139,7 @@ export function requireProductApiScope(
 }
 
 export function requireProductApiAdminKey(request: FastifyRequest): void {
-  const expected = envValue("AGENT_JOLA_ADMIN_KEY", "AGENT_POPPY_ADMIN_KEY");
+  const expected = envValue("AGENT_POPPY_ADMIN_KEY");
   if (!expected) {
     throw new HttpError(
       503,
@@ -151,13 +147,11 @@ export function requireProductApiAdminKey(request: FastifyRequest): void {
       "PRODUCT_API_ADMIN_KEY_NOT_CONFIGURED"
     );
   }
-  const provided =
-    headerValue(request.headers[PRODUCT_API_ADMIN_KEY_HEADER])?.trim() ??
-    headerValue(request.headers[LEGACY_PRODUCT_API_ADMIN_KEY_HEADER])?.trim();
+  const provided = headerValue(request.headers[PRODUCT_API_ADMIN_KEY_HEADER])?.trim();
   if (!provided || provided !== expected) {
     throw new HttpError(
       401,
-      "Missing or invalid Agent Jola admin key.",
+      "Missing or invalid AgentPoppy admin key.",
       "PRODUCT_API_ADMIN_KEY_INVALID"
     );
   }
@@ -229,7 +223,7 @@ function issueProductApiKeyForOwner(
 }
 
 function acceptedProductApiCredentials(): ProductApiCredential[] {
-  const configured = envValue("AGENT_JOLA_API_KEY", "AGENT_POPPY_API_KEY");
+  const configured = envValue("AGENT_POPPY_API_KEY");
   if (configured) {
     return configured
       .split(",")
@@ -239,10 +233,12 @@ function acceptedProductApiCredentials(): ProductApiCredential[] {
   if (process.env.NODE_ENV === "production") {
     return [];
   }
-  return [DEFAULT_LOCAL_PRODUCT_API_KEY, LEGACY_DEFAULT_LOCAL_PRODUCT_API_KEY].map((key) => ({
-    key,
-    user: productApiUser(ALL_PRODUCT_API_SCOPES, "local-dev")
-  }));
+  return [
+    {
+      key: DEFAULT_LOCAL_PRODUCT_API_KEY,
+      user: productApiUser(ALL_PRODUCT_API_SCOPES, "local-dev")
+    }
+  ];
 }
 
 function parseConfiguredCredential(entry: string): ProductApiCredential | undefined {
@@ -344,7 +340,7 @@ function parseSignedPayload(payloadPart: string): SignedProductApiPayload | unde
 }
 
 function productApiIssuerSecret(): string | undefined {
-  return envValue("AGENT_JOLA_KEY_ISSUER_SECRET", "AGENT_POPPY_KEY_ISSUER_SECRET") || undefined;
+  return envValue("AGENT_POPPY_KEY_ISSUER_SECRET") || undefined;
 }
 
 function normalizeProductApiScopes(scopes: unknown): ProductApiScope[] {
@@ -417,9 +413,7 @@ function parseQuotaEnv(
 }
 
 function productApiKeyFromRequest(request: FastifyRequest): string | undefined {
-  const direct =
-    headerValue(request.headers[PRODUCT_API_KEY_HEADER]) ??
-    headerValue(request.headers[LEGACY_PRODUCT_API_KEY_HEADER]);
+  const direct = headerValue(request.headers[PRODUCT_API_KEY_HEADER]);
   if (direct) {
     return direct.trim();
   }
@@ -435,10 +429,6 @@ function headerValue(value: string | string[] | undefined): string | undefined {
   return Array.isArray(value) ? value[0] : value;
 }
 
-function envValue(primary: string, legacy?: string): string {
-  const value = process.env[primary]?.trim();
-  if (value) {
-    return value;
-  }
-  return legacy ? (process.env[legacy]?.trim() ?? "") : "";
+function envValue(name: string): string {
+  return process.env[name]?.trim() ?? "";
 }

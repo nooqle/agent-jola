@@ -1,19 +1,19 @@
 {
-  "name": "@agent-bomber/server",
+  "name": "@agent-poppy/server",
   "version": "0.1.0",
   "type": "module",
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "dev": "pnpm --filter @agent-bomber/replay build && pnpm --filter @agent-bomber/protocol build && tsx watch src/index.ts",
+    "dev": "pnpm --filter @agent-poppy/replay build && pnpm --filter @agent-poppy/protocol build && tsx watch src/index.ts",
     "start": "node dist/index.js",
-    "test": "pnpm --filter @agent-bomber/replay build && pnpm --filter @agent-bomber/protocol build && vitest run src"
+    "test": "pnpm --filter @agent-poppy/replay build && pnpm --filter @agent-poppy/protocol build && vitest run src"
   },
   "dependencies": {
-    "@agent-bomber/agent": "workspace:*",
-    "@agent-bomber/core": "workspace:*",
-    "@agent-bomber/protocol": "workspace:*",
-    "@agent-bomber/replay": "workspace:*",
-    "@agent-bomber/strategy": "workspace:*",
+    "@agent-poppy/agent": "workspace:*",
+    "@agent-poppy/core": "workspace:*",
+    "@agent-poppy/protocol": "workspace:*",
+    "@agent-poppy/replay": "workspace:*",
+    "@agent-poppy/strategy": "workspace:*",
     "@fastify/cors": "^10.0.1",
     "@fastify/websocket": "^11.0.1",
     "fastify": "^5.3.3",

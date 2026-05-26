@@ -1,5 +1,5 @@
-import { DIRECTIONS, getCell, movePosition, positionKey, samePosition } from "@agent-bomber/core";
-import type { BubbleState, MatchState, Position } from "@agent-bomber/core";
+import { DIRECTIONS, getCell, movePosition, positionKey, samePosition } from "@agent-poppy/core";
+import type { BubbleState, MatchState, Position } from "@agent-poppy/core";
 
 export interface DangerWindow {
   position: Position;

@@ -3,7 +3,7 @@ import { mkdirSync } from "node:fs";
 import { join } from "node:path";
 import { DatabaseSync } from "node:sqlite";
 import { customAlphabet, nanoid } from "nanoid";
-import { ENGINE_VERSION, RULES_VERSION, normalizeMapPresetId, type MatchRecord } from "@agent-bomber/core";
+import { ENGINE_VERSION, RULES_VERSION, normalizeMapPresetId, type MatchRecord } from "@agent-poppy/core";
 import {
   AGENT_PROTOCOL_VERSION,
   type AgentDetail,
@@ -17,14 +17,14 @@ import {
   type RoomParticipant,
   type RoomRecord,
   type RoomStatus,
-} from "@agent-bomber/protocol";
+} from "@agent-poppy/protocol";
 import {
   createStrategyVersion,
   type AgentAccessory,
   type AgentAppearance,
   type AgentProfile,
   type AgentStrategyVersion,
-} from "@agent-bomber/strategy";
+} from "@agent-poppy/strategy";
 import { HttpError } from "./errors.js";
 
 interface AgentRow {
@@ -134,7 +134,7 @@ export class Storage {
     this.replayDir = join(dataDir, "replays");
     this.decisionDir = join(dataDir, "decisions");
     mkdirSync(dataDir, { recursive: true });
-    this.db = new DatabaseSync(join(dataDir, "agent-bomber.sqlite"));
+    this.db = new DatabaseSync(join(dataDir, "agent-poppy.sqlite"));
   }
 
   async init(): Promise<void> {
@@ -581,7 +581,7 @@ export class Storage {
     if (used >= limit) {
       throw new HttpError(
         429,
-        `Agent Jola quota exceeded: ${key}`,
+        `AgentPoppy quota exceeded: ${key}`,
         "PRODUCT_API_QUOTA_EXCEEDED",
       );
     }
@@ -606,7 +606,7 @@ export class Storage {
     const provider = normalizePortalProvider(input.provider);
     const providerSubject = input.providerSubject.trim().slice(0, 240);
     const email = input.email.trim().toLowerCase().slice(0, 320);
-    const displayName = cleanName(input.displayName) || email.split("@")[0] || "Agent Jola User";
+    const displayName = cleanName(input.displayName) || email.split("@")[0] || "AgentPoppy User";
     const avatarUrl = input.avatarUrl?.trim().slice(0, 500) || null;
     const existing = this.db
       .prepare("select * from portal_users where provider = ? and provider_subject = ?")
@@ -710,7 +710,7 @@ export class Storage {
     this.getPortalUser(userId);
     const current = this.getPortalProfile(userId);
     const normalizedAppearance = normalizeAppearance(input.appearance, 0, current?.appearance);
-    const agentName = cleanName(input.agentName) || "Agent Jola";
+    const agentName = cleanName(input.agentName) || "AgentPoppy";
     const strategyText = input.strategyText.trim().slice(0, 2000);
     const updatedAt = new Date().toISOString();
     this.db

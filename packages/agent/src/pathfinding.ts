@@ -7,7 +7,7 @@ import {
   type Direction,
   type MatchState,
   type Position,
-} from "@agent-bomber/core";
+} from "@agent-poppy/core";
 import { buildDangerWindows, type DangerWindow } from "./danger.js";
 
 const SAFE_ESCAPE_HOLD_TICKS = 5;

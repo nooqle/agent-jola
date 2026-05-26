@@ -1,4 +1,4 @@
-# Agent Jola 对话驱动格子爆破对战游戏设计文档
+# AgentPoppy 对话驱动格子爆破对战游戏设计文档
 
 ## 1. 背景
 
@@ -840,12 +840,12 @@ packages/
     strategy/
   openclaw/
 docs/
-  docs/agent-jola-game-design.md
+  docs/agent-poppy-game-design.md
 ```
 
 当前设计文档先放在仓库根目录，后续创建项目结构时可移动到 `docs/`。
 
-详细工程拆解见 `agent-jola-technical-design.md`。
+详细工程拆解见 `agent-poppy-technical-design.md`。
 
 ## 16. 后续需要确认的问题
 

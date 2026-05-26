@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { createInitialMatchState } from "@agent-bomber/core";
+import { createInitialMatchState } from "@agent-poppy/core";
 import { buildDangerWindows, dangerAt } from "../danger.js";
 
 describe("danger windows", () => {

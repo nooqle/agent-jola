@@ -9,15 +9,12 @@ import {
   DEFAULT_BASE_URL,
   DEFAULT_LOCAL_PRODUCT_API_KEY,
   envValue,
-  envValueAny,
 } from "./client.js";
 
 const rootDir = resolve(fileURLToPath(new URL("../../../", import.meta.url)));
 const localEnvPath = resolve(rootDir, ".env.local");
-const managedStart = "# >>> Agent Jola local settings";
-const managedEnd = "# <<< Agent Jola local settings";
-const legacyManagedStart = "# >>> Agent Poppy local settings";
-const legacyManagedEnd = "# <<< Agent Poppy local settings";
+const managedStart = "# >>> AgentPoppy local settings";
+const managedEnd = "# <<< AgentPoppy local settings";
 
 const argv = process.argv.slice(2);
 const command = argv[0] ?? "status";
@@ -42,17 +39,17 @@ switch (command) {
 async function showStatus(strict: boolean): Promise<void> {
   const baseUrl =
     optionValue("--base-url") ??
-    envValueAny(["AGENT_JOLA_BASE_URL", "AGENT_POPPY_BASE_URL"], DEFAULT_BASE_URL);
+    envValue("AGENT_POPPY_BASE_URL", DEFAULT_BASE_URL);
   const cloudUrl =
     optionValue("--cloud-url") ??
-    envValueAny(["AGENT_JOLA_CLOUD_BASE_URL", "AGENT_POPPY_CLOUD_BASE_URL"], baseUrl);
+    envValue("AGENT_POPPY_CLOUD_BASE_URL", baseUrl);
   const apiKey =
     optionValue("--api-key") ??
-    envValueAny(["AGENT_JOLA_API_KEY", "AGENT_POPPY_API_KEY"], DEFAULT_LOCAL_PRODUCT_API_KEY);
-  const provider = envValueAny(["AGENT_JOLA_PROVIDER", "AGENT_POPPY_PROVIDER"], "mock");
-  const agentName = envValueAny(["AGENT_JOLA_AGENT_NAME", "AGENT_POPPY_AGENT_NAME"], "Local Agent");
+    envValue("AGENT_POPPY_API_KEY", DEFAULT_LOCAL_PRODUCT_API_KEY);
+  const provider = envValue("AGENT_POPPY_PROVIDER", "mock");
+  const agentName = envValue("AGENT_POPPY_AGENT_NAME", "Local Agent");
 
-  console.log("Agent Jola local settings");
+  console.log("AgentPoppy local settings");
   console.log(`- Base URL: ${baseUrl}`);
   console.log(`- Cloud URL: ${cloudUrl}`);
   console.log(`- Product key: ${mask(apiKey)}`);
@@ -90,16 +87,16 @@ async function showStatus(strict: boolean): Promise<void> {
 async function syncProfile(): Promise<void> {
   const localBaseUrl =
     optionValue("--base-url") ??
-    envValueAny(["AGENT_JOLA_BASE_URL", "AGENT_POPPY_BASE_URL"], DEFAULT_BASE_URL);
+    envValue("AGENT_POPPY_BASE_URL", DEFAULT_BASE_URL);
   const cloudBaseUrl =
     optionValue("--cloud-url") ??
-    envValueAny(["AGENT_JOLA_CLOUD_BASE_URL", "AGENT_POPPY_CLOUD_BASE_URL"], localBaseUrl);
+    envValue("AGENT_POPPY_CLOUD_BASE_URL", localBaseUrl);
   const apiKey =
     optionValue("--api-key") ??
-    envValueAny(["AGENT_JOLA_API_KEY", "AGENT_POPPY_API_KEY"], DEFAULT_LOCAL_PRODUCT_API_KEY);
+    envValue("AGENT_POPPY_API_KEY", DEFAULT_LOCAL_PRODUCT_API_KEY);
   const localApiKey =
     optionValue("--local-api-key") ??
-    envValueAny(["AGENT_JOLA_LOCAL_API_KEY", "AGENT_POPPY_LOCAL_API_KEY"], apiKey);
+    envValue("AGENT_POPPY_LOCAL_API_KEY", apiKey);
 
   const cloudClient = new AgentPoppyClient({ baseUrl: cloudBaseUrl, apiKey });
   const localClient = new AgentPoppyClient({ baseUrl: localBaseUrl, apiKey: localApiKey });
@@ -123,43 +120,43 @@ async function writeSettings(): Promise<void> {
     const baseUrl = await valueFromOptionOrPrompt(
       answers,
       "--base-url",
-      "Agent Jola server URL",
-      envValueAny(["AGENT_JOLA_BASE_URL", "AGENT_POPPY_BASE_URL"], DEFAULT_BASE_URL),
+      "AgentPoppy server URL",
+      envValue("AGENT_POPPY_BASE_URL", DEFAULT_BASE_URL),
     );
     const cloudUrl = await valueFromOptionOrPrompt(
       answers,
       "--cloud-url",
-      "Agent Jola cloud API URL",
-      envValueAny(["AGENT_JOLA_CLOUD_BASE_URL", "AGENT_POPPY_CLOUD_BASE_URL"], baseUrl),
+      "AgentPoppy cloud API URL",
+      envValue("AGENT_POPPY_CLOUD_BASE_URL", baseUrl),
     );
     const apiKey = await valueFromOptionOrPrompt(
       answers,
       "--api-key",
-      "Agent Jola Product API key",
-      envValueAny(["AGENT_JOLA_API_KEY", "AGENT_POPPY_API_KEY"], DEFAULT_LOCAL_PRODUCT_API_KEY),
+      "AgentPoppy Product API key",
+      envValue("AGENT_POPPY_API_KEY", DEFAULT_LOCAL_PRODUCT_API_KEY),
     );
     const agentName = await valueFromOptionOrPrompt(
       answers,
       "--agent",
       "Local Agent name",
-      envValueAny(["AGENT_JOLA_AGENT_NAME", "AGENT_POPPY_AGENT_NAME"], "Local Agent"),
+      envValue("AGENT_POPPY_AGENT_NAME", "Local Agent"),
     );
     const provider = await valueFromOptionOrPrompt(
       answers,
       "--provider",
       "Provider (mock/openai/anthropic)",
-      envValueAny(["AGENT_JOLA_PROVIDER", "AGENT_POPPY_PROVIDER"], "mock"),
+      envValue("AGENT_POPPY_PROVIDER", "mock"),
     );
 
     const values: Record<string, string> = {
-      AGENT_JOLA_BASE_URL: baseUrl,
-      AGENT_JOLA_CLOUD_BASE_URL: cloudUrl,
-      AGENT_JOLA_API_KEY: apiKey,
-      AGENT_JOLA_AGENT_NAME: agentName,
-      AGENT_JOLA_PROVIDER: normalizeProvider(provider),
+      AGENT_POPPY_BASE_URL: baseUrl,
+      AGENT_POPPY_CLOUD_BASE_URL: cloudUrl,
+      AGENT_POPPY_API_KEY: apiKey,
+      AGENT_POPPY_AGENT_NAME: agentName,
+      AGENT_POPPY_PROVIDER: normalizeProvider(provider),
     };
 
-    if (values.AGENT_JOLA_PROVIDER === "openai") {
+    if (values.AGENT_POPPY_PROVIDER === "openai") {
       values.OPENAI_MODEL = await valueFromOptionOrPrompt(
         answers,
         "--model",
@@ -172,7 +169,7 @@ async function writeSettings(): Promise<void> {
       }
     }
 
-    if (values.AGENT_JOLA_PROVIDER === "anthropic") {
+    if (values.AGENT_POPPY_PROVIDER === "anthropic") {
       values.ANTHROPIC_MODEL = await valueFromOptionOrPrompt(
         answers,
         "--model",
@@ -186,7 +183,7 @@ async function writeSettings(): Promise<void> {
     }
 
     await upsertManagedEnvBlock(values);
-    console.log(`Wrote Agent Jola settings to ${localEnvPath}`);
+    console.log(`Wrote AgentPoppy settings to ${localEnvPath}`);
     await showStatus(false);
   } finally {
     answers?.close();
@@ -223,7 +220,7 @@ async function upsertManagedEnvBlock(values: Record<string, string>): Promise<vo
 }
 
 function removeManagedBlock(value: string): string {
-  return removeBlock(removeBlock(value, managedStart, managedEnd), legacyManagedStart, legacyManagedEnd);
+  return removeBlock(value, managedStart, managedEnd);
 }
 
 function removeBlock(value: string, startMarker: string, endMarker: string): string {
@@ -273,7 +270,7 @@ function printUsage(): void {
   pnpm agent:setting check
   pnpm agent:setting sync
   pnpm agent:setting init
-  pnpm agent:setting write --yes --cloud-url https://agentjola.art --api-key <key> --provider mock --agent Ember
+  pnpm agent:setting write --yes --cloud-url https://agentpoppy.example.com --api-key <key> --provider mock --agent Poppy
   pnpm agent:setting write --yes --provider openai --openai-key <key> --model gpt-4.1
 `);
 }

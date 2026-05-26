@@ -43,4 +43,4 @@ jobs:
         run: pnpm audit:security
 
       - name: Docker build smoke
-        run: docker build -t agent-jola:ci .
+        run: docker build -t agent-poppy:ci .

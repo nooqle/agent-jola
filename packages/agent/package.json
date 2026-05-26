@@ -1,5 +1,5 @@
 {
-  "name": "@agent-bomber/agent",
+  "name": "@agent-poppy/agent",
   "version": "0.1.0",
   "type": "module",
   "main": "dist/index.js",
@@ -9,7 +9,7 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@agent-bomber/core": "workspace:*",
-    "@agent-bomber/strategy": "workspace:*"
+    "@agent-poppy/core": "workspace:*",
+    "@agent-poppy/strategy": "workspace:*"
   }
 }

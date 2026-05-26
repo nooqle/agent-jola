@@ -20,7 +20,7 @@ Before applying or saving a Prompt, show:
 Then ask:
 
 ```text
-请确认是否把这份作战 Prompt 写入 Agent Jola 本地配置，并用于之后的对战？
+请确认是否把这份作战 Prompt 写入 AgentPoppy 本地配置，并用于之后的对战？
 ```
 
 Proceed only after an explicit yes/confirm.

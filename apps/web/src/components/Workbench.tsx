@@ -19,7 +19,7 @@ import {
   buildLocalAgentPrompt,
   parseNaturalLanguageStrategy,
   type AgentStrategy
-} from "@agent-bomber/strategy";
+} from "@agent-poppy/strategy";
 import { useEffect, useMemo, useState, type CSSProperties, type ReactNode } from "react";
 import { useI18n } from "../i18n";
 import {
@@ -867,7 +867,7 @@ function buildMatchParticipantIds(myAgentId: string | undefined, agents: AgentPr
 }
 
 function randomizeStorageKey(agentId: string): string {
-  return `agent-jola-free-randomize:${agentId}`;
+  return `agent-poppy-free-randomize:${agentId}`;
 }
 
 function clamp01(value: number): number {

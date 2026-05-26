@@ -15,18 +15,15 @@ import type {
   StartRoomResponse,
   StrategyTemplateDetailResponse,
   StrategyTemplatesResponse
-} from "@agent-bomber/protocol";
+} from "@agent-poppy/protocol";
 
 export const DEFAULT_BASE_URL = "http://127.0.0.1:3001";
-export const DEFAULT_LOCAL_PRODUCT_API_KEY = "agent-jola-local-dev-key";
-export const LEGACY_DEFAULT_LOCAL_PRODUCT_API_KEY = "agent-poppy-local-dev-key";
+export const DEFAULT_LOCAL_PRODUCT_API_KEY = "agent-poppy-local-dev-key";
 
-export interface AgentJolaClientOptions {
+export interface AgentPoppyClientOptions {
   baseUrl?: string;
   apiKey?: string;
 }
-
-export type AgentPoppyClientOptions = AgentJolaClientOptions;
 
 export interface ProductMeResponse {
   user: ProductApiUser;
@@ -65,21 +62,19 @@ export interface ProviderLoopOptions<TPayload> {
   defaultStrategy: string;
   maxPolls: number;
   pollIntervalMs: number;
-  client?: AgentJolaClient;
+  client?: AgentPoppyClient;
   decide(payload: TPayload): Promise<unknown>;
 }
 
-export class AgentJolaClient {
+export class AgentPoppyClient {
   private readonly baseUrl: string;
   private readonly apiKey: string;
 
-  constructor(options: AgentJolaClientOptions = {}) {
+  constructor(options: AgentPoppyClientOptions = {}) {
     this.baseUrl = (
-      options.baseUrl ?? envValueAny(["AGENT_JOLA_BASE_URL", "AGENT_POPPY_BASE_URL"], DEFAULT_BASE_URL)
+      options.baseUrl ?? envValue("AGENT_POPPY_BASE_URL", DEFAULT_BASE_URL)
     ).replace(/\/$/, "");
-    this.apiKey =
-      options.apiKey ??
-      envValueAny(["AGENT_JOLA_API_KEY", "AGENT_POPPY_API_KEY"], DEFAULT_LOCAL_PRODUCT_API_KEY);
+    this.apiKey = options.apiKey ?? envValue("AGENT_POPPY_API_KEY", DEFAULT_LOCAL_PRODUCT_API_KEY);
   }
 
   me(): Promise<ProductMeResponse> {
@@ -206,18 +201,16 @@ export class AgentJolaClient {
       method: options.method ?? "GET",
       headers: {
         "Content-Type": "application/json",
-        "X-Agent-Jola-Key": this.apiKey
+        "X-Agent-Poppy-Key": this.apiKey
       }
     };
     if (options.body !== undefined) {
       init.body = JSON.stringify(options.body);
     }
     const response = await fetch(`${this.baseUrl}${path}`, init);
-    return parseJsonResponse(response, "Agent Jola") as Promise<T>;
+    return parseJsonResponse(response, "AgentPoppy") as Promise<T>;
   }
 }
-
-export const AgentPoppyClient = AgentJolaClient;
 
 export function envValue(name: string, fallback?: string): string {
   const value = process.env[name]?.trim();
@@ -245,7 +238,7 @@ export function requireEnvValue(name: string): string {
 export async function runProviderLoop<TPayload>(
   options: ProviderLoopOptions<TPayload>
 ): Promise<void> {
-  const client = options.client ?? new AgentJolaClient();
+  const client = options.client ?? new AgentPoppyClient();
   const agent = await ensureProfileAgent(options.defaultAgentName, options.defaultStrategy, client);
   await client.connectBridge(agent.id, options.label);
 
@@ -293,7 +286,7 @@ export async function runProviderLoop<TPayload>(
 export async function ensureProfileAgent(
   defaultName: string,
   strategyText: string,
-  client = new AgentJolaClient()
+  client = new AgentPoppyClient()
 ): Promise<AgentDetail> {
   const profile = await client.profile();
   if (profile.agent) {
@@ -338,11 +331,11 @@ export async function callAnthropicMessages(
 }
 
 export function maxPollsFromEnv(): number {
-  return numberEnvAny(["AGENT_JOLA_MAX_POLLS", "AGENT_POPPY_MAX_POLLS"], 240);
+  return numberEnvAny(["AGENT_POPPY_MAX_POLLS"], 240);
 }
 
 export function pollIntervalFromEnv(): number {
-  return numberEnvAny(["AGENT_JOLA_POLL_MS", "AGENT_POPPY_POLL_MS"], 150);
+  return numberEnvAny(["AGENT_POPPY_POLL_MS"], 150);
 }
 
 export function openAIWaitResponse(reason: string): unknown {

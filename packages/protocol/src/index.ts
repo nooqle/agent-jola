@@ -15,22 +15,22 @@ import {
   type MatchState,
   type PlayerState,
   type Position
-} from "@agent-bomber/core";
-import type { ReplayFile } from "@agent-bomber/replay";
+} from "@agent-poppy/core";
+import type { ReplayFile } from "@agent-poppy/replay";
 import type {
   AgentAppearance,
   AgentProfile,
   AgentStrategyVersion,
   StrategyPromptTemplate
-} from "@agent-bomber/strategy";
+} from "@agent-poppy/strategy";
 
-export const AGENT_PROTOCOL_VERSION = "agent-jola-agent@1";
+export const AGENT_PROTOCOL_VERSION = "agent-poppy-agent@1";
 
 export type { AgentAppearance, AgentProfile, AgentStrategyVersion };
 
 export interface HealthResponse {
   ok: true;
-  service: "agent-bomber-server";
+  service: "agent-poppy-server";
   time: string;
 }
 
@@ -51,8 +51,7 @@ export interface ProductApiUser {
 }
 
 export interface ProductApiAuthInfo {
-  header: "X-Agent-Jola-Key";
-  legacyHeaders?: string[];
+  header: "X-Agent-Poppy-Key";
   authorization: "Bearer";
   source: "env" | "issuer" | "local-dev-default" | "missing";
   scopes: ProductApiScope[];
@@ -422,7 +421,7 @@ export interface AnthropicMessagesAgentRequest {
 }
 
 const agentActionToolDescription =
-  "Choose exactly one legal Agent Bomber action for the current tick. Use wait when no safe action is available.";
+  "Choose exactly one legal AgentPoppy action for the current tick. Use wait when no safe action is available.";
 
 const agentActionToolInputSchema: JsonSchema = {
   type: "object",
@@ -710,7 +709,7 @@ function legalActionsForAgent(state: MatchState, player: PlayerState): AgentActi
 function createAgentDecisionPrompt(request: AgentActionRequest): string {
   return JSON.stringify(
     {
-      type: "agent_bomber_decision",
+      type: "agent_poppy_decision",
       requestId: request.requestId,
       deadlineMs: request.deadlineMs,
       observation: compactObservation(request.observation),

@@ -93,7 +93,7 @@ export interface LocalAgentPromptOptions {
 }
 
 export const DEFAULT_LOCAL_AGENT_RUNTIME_HINT =
-  "你可以通过 Agent Jola 本地 SDK 或 /api/bridge 拉取观察、提交动作；如果只是在网站里配置，把下面“当前推荐战术”复制到作战准备即可。";
+  "你可以通过 AgentPoppy 本地 SDK 或 /api/bridge 拉取观察、提交动作；如果只是在网站里配置，把下面“当前推荐战术”复制到作战准备即可。";
 
 export const DEFAULT_LOCAL_AGENT_LANGUAGE_NOTE =
   "请保持输出简洁，优先返回可执行策略，不要解释无关背景。";
@@ -124,7 +124,7 @@ export function buildLocalAgentPrompt({
   languageNote = DEFAULT_LOCAL_AGENT_LANGUAGE_NOTE
 }: LocalAgentPromptOptions): string {
   return [
-    `你是 Agent Jola 的本地对战 Agent：${agentName}。`,
+    `你是 AgentPoppy 的本地对战 Agent：${agentName}。`,
     runtimeHint,
     "",
     "作战目标：在 4 人毒圈乱斗里成为最后存活者。",

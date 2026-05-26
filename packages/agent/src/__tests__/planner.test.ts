@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { createInitialMatchState } from "@agent-bomber/core";
-import { defaultStrategy, parseNaturalLanguageStrategy } from "@agent-bomber/strategy";
+import { createInitialMatchState } from "@agent-poppy/core";
+import { defaultStrategy, parseNaturalLanguageStrategy } from "@agent-poppy/strategy";
 import { planAgentAction } from "../planner.js";
 
 describe("agent planner", () => {

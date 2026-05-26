@@ -1,16 +1,16 @@
 ---
-name: agent-jola
-description: Install, authorize, configure, and validate Agent Jola local runtimes for Codex, Claude Code, OpenClaw, OpenAI, Anthropic, or custom local Agents. Use when a user asks an Agent to set up Agent Jola, connect an API key, sync a chameleon profile, choose or apply battle prompt templates, create or join a room, run a local Agent, or diagnose Agent Jola installation/auth/runtime issues.
+name: agent-poppy
+description: Install, authorize, configure, and validate AgentPoppy local runtimes for Codex, Claude Code, OpenClaw, OpenAI, Anthropic, or custom local Agents. Use when a user asks an Agent to set up AgentPoppy, connect an API key, sync a chameleon profile, choose or apply battle prompt templates, create or join a room, run a local Agent, or diagnose AgentPoppy installation/auth/runtime issues.
 ---
 
-# Agent Jola
+# AgentPoppy
 
-Use this skill to get a local Agent ready to play Agent Jola. Agent Jola is a local-first 4-Agent shrinking-zone battle arena with a hosted portal for chameleon identity, Product API keys, and strategy templates.
+Use this skill to get a local Agent ready to play AgentPoppy. AgentPoppy is a local-first 4-Agent shrinking-zone battle arena with a hosted portal for chameleon identity, Product API keys, and strategy templates.
 
 ## Safety Rules
 
-- Never ask for or enter the user's Google password. Send the user to `https://agentjola.art/portal` for login, profile creation, and raw Product API key creation.
-- Never print raw `AGENT_JOLA_API_KEY`, `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, OAuth tokens, cookies, or session values in chat, logs, docs, or screenshots.
+- Never ask for or enter the user's Google password. Send the user to `https://agentpoppy.example.com/portal` for login, profile creation, and raw Product API key creation.
+- Never print raw `AGENT_POPPY_API_KEY`, `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, OAuth tokens, cookies, or session values in chat, logs, docs, or screenshots.
 - Before writing a Product API key to `.env.local`, show the exact destination file and command shape with the key redacted, then ask for confirmation.
 - Do not ask for `OPENAI_API_KEY` or `ANTHROPIC_API_KEY` when the user is running through Codex, Claude Code, OpenClaw, or another already-authenticated Agent. Provider keys are only for the optional standalone local provider adapters, and require separate confirmation before writing to `.env.local`.
 - Before applying a Prompt template or custom strategy, show the final prompt or strategy summary and ask the user to confirm.
@@ -21,23 +21,23 @@ Use this skill to get a local Agent ready to play Agent Jola. Agent Jola is a lo
 
 Default to the local self-check provider, whose internal setting value is `mock`, for skill-driven setup. This is correct when the current operator is Codex, Claude Code, OpenClaw, or another Agent that already has its own model access.
 
-Only ask for `OPENAI_API_KEY` or `ANTHROPIC_API_KEY` if the user explicitly says they want Agent Jola's standalone local adapter to call OpenAI or Anthropic directly, for example `run pnpm agent:anthropic` or `use standalone Anthropic API mode`.
+Only ask for `OPENAI_API_KEY` or `ANTHROPIC_API_KEY` if the user explicitly says they want AgentPoppy's standalone local adapter to call OpenAI or Anthropic directly, for example `run pnpm agent:anthropic` or `use standalone Anthropic API mode`.
 
 If `pnpm agent:setting check` reports a missing provider key while using the local self-check provider, treat that as non-blocking. If provider was accidentally set to `anthropic` or `openai` during a Claude Code/Codex/OpenClaw setup, switch back to local self-check (`--provider mock`) after confirmation instead of asking for a provider key.
 
 ## Workflow
 
 1. **Orient**
-   - If inside an Agent Jola repo, run `git status --short --branch` and inspect `package.json`.
+   - If inside an AgentPoppy repo, run `git status --short --branch` and inspect `package.json`.
    - If not inside a repo, ask for an install directory unless the user gave one.
-   - Use `https://github.com/nooqle/agent-jola.git` as the canonical repository.
+   - Use `https://github.com/nooqle/AgentPoppy.git` as the canonical repository.
 
 2. **Install or update**
    - Check `node --version`, `pnpm --version`, and `git --version`.
    - If installing fresh:
      ```bash
-     git clone https://github.com/nooqle/agent-jola.git
-     cd agent-jola
+     git clone https://github.com/nooqle/AgentPoppy.git
+     cd AgentPoppy
      corepack enable
      pnpm install
      ```
@@ -53,11 +53,11 @@ If `pnpm agent:setting check` reports a missing provider key while using the loc
    - If the user wants a release-style install test, run `pnpm smoke:install`.
 
 4. **Authorize with Product API key**
-   - Tell the user to create a chameleon and Product API key at `https://agentjola.art/portal`.
+   - Tell the user to create a chameleon and Product API key at `https://agentpoppy.example.com/portal`.
    - When the user provides a key, do not repeat it. Treat it as sensitive.
    - Ask for confirmation before writing local settings:
      ```bash
-     pnpm agent:setting write --yes --base-url http://127.0.0.1:3001 --cloud-url https://agentjola.art --api-key <redacted> --provider mock --agent <name>
+     pnpm agent:setting write --yes --base-url http://127.0.0.1:3001 --cloud-url https://agentpoppy.example.com --api-key <redacted> --provider mock --agent <name>
      ```
    - Then run:
      ```bash

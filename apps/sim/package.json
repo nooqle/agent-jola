@@ -1,5 +1,5 @@
 {
-  "name": "@agent-bomber/sim",
+  "name": "@agent-poppy/sim",
   "version": "0.1.0",
   "type": "module",
   "scripts": {
@@ -9,10 +9,10 @@
     "benchmark": "tsx src/cli.ts benchmark"
   },
   "dependencies": {
-    "@agent-bomber/agent": "workspace:*",
-    "@agent-bomber/core": "workspace:*",
-    "@agent-bomber/replay": "workspace:*",
-    "@agent-bomber/strategy": "workspace:*"
+    "@agent-poppy/agent": "workspace:*",
+    "@agent-poppy/core": "workspace:*",
+    "@agent-poppy/replay": "workspace:*",
+    "@agent-poppy/strategy": "workspace:*"
   },
   "devDependencies": {
     "tsx": "^4.19.4"

@@ -24,8 +24,8 @@ import type {
   PortalSessionResponse,
   PortalProfile,
   RoomRecord
-} from "@agent-bomber/protocol";
-import type { StrategyPromptTemplate } from "@agent-bomber/strategy";
+} from "@agent-poppy/protocol";
+import type { StrategyPromptTemplate } from "@agent-poppy/strategy";
 import type {
   AgentAccessory,
   AgentAppearance,
@@ -45,8 +45,8 @@ import type {
 } from "./types";
 
 const API_BASE_URL = normalizeApiBaseUrl(import.meta.env.VITE_API_BASE_URL);
-export const DEFAULT_LOCAL_PRODUCT_API_KEY = "agent-jola-local-dev-key";
-export const LOCAL_PRODUCT_API_KEY_STORAGE = "agent-jola-local-api-key";
+export const DEFAULT_LOCAL_PRODUCT_API_KEY = "agent-poppy-local-dev-key";
+export const LOCAL_PRODUCT_API_KEY_STORAGE = "agent-poppy-local-api-key";
 
 let fallbackAgents = [...mockAgents];
 let fallbackStrategies = [...mockStrategies];
@@ -98,7 +98,7 @@ export function loadLocalProductApiKey(): string {
   if (stored) {
     return stored;
   }
-  const configured = import.meta.env.VITE_AGENT_JOLA_API_KEY?.trim();
+  const configured = import.meta.env.VITE_AGENT_POPPY_API_KEY?.trim();
   return configured || DEFAULT_LOCAL_PRODUCT_API_KEY;
 }
 
@@ -575,7 +575,7 @@ async function requestProductJson<T>(
   return requestJson<T>(path, {
     ...options,
     headers: {
-      "X-Agent-Jola-Key": apiKey,
+      "X-Agent-Poppy-Key": apiKey,
       ...options.headers
     }
   });

@@ -13,8 +13,8 @@ import {
   type MatchState,
   type PlayerState,
   type Position,
-} from "@agent-bomber/core";
-import { defaultStrategy, type AgentStrategy, type StrategyTactics } from "@agent-bomber/strategy";
+} from "@agent-poppy/core";
+import { defaultStrategy, type AgentStrategy, type StrategyTactics } from "@agent-poppy/strategy";
 import {
   blastThreatCells,
   buildDangerWindows,

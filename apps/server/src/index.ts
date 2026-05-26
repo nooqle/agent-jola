@@ -6,9 +6,9 @@ import { MatchRuntimeManager } from "./runtime.js";
 import { Storage } from "./storage.js";
 
 const rootDir = resolve(fileURLToPath(new URL("../../../", import.meta.url)));
-const dataDir = resolveRootPath(process.env.AGENT_BOMBER_DATA_DIR, resolve(rootDir, "data"));
+const dataDir = resolveRootPath(process.env.AGENT_POPPY_DATA_DIR, resolve(rootDir, "data"));
 const webDistDir = resolveRootPath(
-  process.env.AGENT_JOLA_WEB_DIST ?? process.env.AGENT_POPPY_WEB_DIST,
+  process.env.AGENT_POPPY_WEB_DIST,
   resolve(rootDir, "apps", "web", "dist")
 );
 const port = Number(process.env.PORT ?? 3001);
