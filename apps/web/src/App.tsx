@@ -28,7 +28,6 @@ const MatchViewer = lazy(() =>
 const ReplayViewer = lazy(() =>
   import("./components/ReplayViewer").then((module) => ({ default: module.ReplayViewer })),
 );
-const APP_BASE_PATH = normalizeBasePath(import.meta.env.BASE_URL);
 
 type ViewState =
   | { name: "local-room" }
@@ -67,7 +66,7 @@ function AppContent({
   const [matches, setMatches] = useState<MatchRecord[]>([]);
   const [leaderboard, setLeaderboard] = useState<LeaderboardRow[]>([]);
   const [mode, setMode] = useState<ServerMode>("checking");
-  const [view, setView] = useState<ViewState>(() => viewFromPath(routePath(window.location.pathname)));
+  const [view, setView] = useState<ViewState>(() => viewFromPath(window.location.pathname));
   const { t } = useI18n();
   const viewerFallback = (
     <section className="viewer-shell loading-view">
@@ -101,14 +100,14 @@ function AppContent({
   }, []);
 
   useEffect(() => {
-    const handlePopState = () => setView(viewFromPath(routePath(window.location.pathname)));
+    const handlePopState = () => setView(viewFromPath(window.location.pathname));
     window.addEventListener("popstate", handlePopState);
     return () => window.removeEventListener("popstate", handlePopState);
   }, []);
 
   const navigate = (next: ViewState, path: string) => {
     setView(next);
-    window.history.pushState({}, "", appPath(path));
+    window.history.pushState({}, "", path);
   };
 
   const handleCreateAgent = async (name: string, appearance?: AgentAppearance) => {
@@ -245,20 +244,4 @@ function viewFromPath(pathname: string): ViewState {
     return { name: "workbench" };
   }
   return { name: "portal" };
-}
-
-function normalizeBasePath(baseUrl: string): string {
-  const trimmed = baseUrl.replace(/\/$/, "");
-  return trimmed === "" || trimmed === "." ? "" : trimmed;
-}
-
-function routePath(pathname: string): string {
-  if (APP_BASE_PATH && pathname.startsWith(APP_BASE_PATH)) {
-    return pathname.slice(APP_BASE_PATH.length) || "/";
-  }
-  return pathname;
-}
-
-function appPath(path: string): string {
-  return `${APP_BASE_PATH}${path}`;
 }
